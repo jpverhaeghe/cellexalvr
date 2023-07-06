@@ -12699,7 +12699,6 @@ GameObject:
   - component: {fileID: 4433445434453263162}
   - component: {fileID: 4525269226092256004}
   - component: {fileID: 4530900799286236132}
-  - component: {fileID: 4435745028452405960}
   - component: {fileID: 4543559051457596924}
   m_Layer: 0
   m_Name: Gene Name
@@ -12778,14 +12777,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4512181802018748782}
   m_Mesh: {fileID: 0}
---- !u!222 &4435745028452405960
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4512181802018748782}
-  m_CullTransparentMesh: 0
 --- !u!114 &4543559051457596924
 MonoBehaviour:
   m_ObjectHideFlags: 0
