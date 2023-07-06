@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 114073428060975046}
   - component: {fileID: 54762506670964714}
   - component: {fileID: 114490444003295042}
-  - component: {fileID: -1707822992471283443}
   - component: {fileID: 2759310489324775323}
   m_Layer: 8
   m_Name: Graph_Prefab
@@ -224,7 +223,7 @@ MonoBehaviour:
   m_SmoothRotation: 0
   m_SmoothRotationAmount: 5
   m_TightenRotation: 0.5
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
@@ -253,19 +252,6 @@ MonoBehaviour:
   actionAsset: {fileID: 0}
   action: {fileID: 0}
   referenceManager: {fileID: 0}
---- !u!114 &-1707822992471283443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128814461414928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c17dc86c6940f1c42805cacf3a636dbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doScale: 0
 --- !u!114 &2759310489324775323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,7 +283,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224246408751743618}
   - component: {fileID: 23151149271378520}
-  - component: {fileID: 222576347568887888}
   - component: {fileID: 114815460846482644}
   m_Layer: 8
   m_Name: Info Graphname
@@ -368,14 +353,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &222576347568887888
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1141931572521968}
-  m_CullTransparentMesh: 0
 --- !u!114 &114815460846482644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +456,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224753484475217584}
   - component: {fileID: 23781538392445668}
-  - component: {fileID: 222006243405917730}
   - component: {fileID: 114566603823957088}
   m_Layer: 8
   m_Name: Info GraphNr
@@ -550,14 +526,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &222006243405917730
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209820627558458}
-  m_CullTransparentMesh: 0
 --- !u!114 &114566603823957088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,7 +681,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224416919576890652}
   - component: {fileID: 23765712030016384}
-  - component: {fileID: 222584759508777104}
   - component: {fileID: 114460485008951306}
   m_Layer: 8
   m_Name: Info Graphinfo
@@ -784,14 +751,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &222584759508777104
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495761062150566}
-  m_CullTransparentMesh: 0
 --- !u!114 &114460485008951306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,7 +969,6 @@ GameObject:
   - component: {fileID: 600047241880897092}
   - component: {fileID: 167411112988851349}
   - component: {fileID: 2827333659288004606}
-  - component: {fileID: 2524079006304442138}
   - component: {fileID: 7608257574666734895}
   m_Layer: 0
   m_Name: Percent of all text
@@ -1089,14 +1047,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460111390551159155}
   m_Mesh: {fileID: 0}
---- !u!222 &2524079006304442138
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460111390551159155}
-  m_CullTransparentMesh: 0
 --- !u!114 &7608257574666734895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,7 +1181,6 @@ GameObject:
   - component: {fileID: 381027092981141469}
   - component: {fileID: 1258289702227948464}
   - component: {fileID: 983284743709916173}
-  - component: {fileID: 7352394393391011197}
   - component: {fileID: 2703670672891890959}
   m_Layer: 0
   m_Name: Attributes text
@@ -1310,14 +1259,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700416836265605199}
   m_Mesh: {fileID: 0}
---- !u!222 &7352394393391011197
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1700416836265605199}
-  m_CullTransparentMesh: 0
 --- !u!114 &2703670672891890959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1421,7 +1362,6 @@ GameObject:
   - component: {fileID: 3209798673259213277}
   - component: {fileID: 803108429720677871}
   - component: {fileID: 7643845352465210399}
-  - component: {fileID: 5009363859213002921}
   - component: {fileID: 7703867577230401176}
   m_Layer: 0
   m_Name: Percent of all text
@@ -1500,14 +1440,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3914956380147642033}
   m_Mesh: {fileID: 0}
---- !u!222 &5009363859213002921
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3914956380147642033}
-  m_CullTransparentMesh: 0
 --- !u!114 &7703867577230401176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,7 +1626,6 @@ GameObject:
   - component: {fileID: 8125024087472744279}
   - component: {fileID: 7751928517907458140}
   - component: {fileID: 2140561666395088128}
-  - component: {fileID: 6422025260570641477}
   - component: {fileID: 4720609527351128143}
   m_Layer: 0
   m_Name: Percent of active text
@@ -1773,14 +1704,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3937303866085599493}
   m_Mesh: {fileID: 0}
---- !u!222 &6422025260570641477
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3937303866085599493}
-  m_CullTransparentMesh: 0
 --- !u!114 &4720609527351128143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1967,7 +1890,6 @@ GameObject:
   - component: {fileID: 8251785973957547000}
   - component: {fileID: 4173075708703289793}
   - component: {fileID: 1556453676674119303}
-  - component: {fileID: 3453877798691996555}
   - component: {fileID: 2339283121734427101}
   m_Layer: 0
   m_Name: Number of cells text
@@ -2046,14 +1968,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4558567196164519119}
   m_Mesh: {fileID: 0}
---- !u!222 &3453877798691996555
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4558567196164519119}
-  m_CullTransparentMesh: 0
 --- !u!114 &2339283121734427101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2501,7 +2415,6 @@ GameObject:
   - component: {fileID: 8878742058783354368}
   - component: {fileID: 9082886196806376287}
   - component: {fileID: 2956093348812650035}
-  - component: {fileID: 282675282197007146}
   - component: {fileID: 9116736024562280465}
   m_Layer: 0
   m_Name: Number of cells text
@@ -2580,14 +2493,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6802771145575412765}
   m_Mesh: {fileID: 0}
---- !u!222 &282675282197007146
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6802771145575412765}
-  m_CullTransparentMesh: 0
 --- !u!114 &9116736024562280465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2774,7 +2679,6 @@ GameObject:
   - component: {fileID: 395210773442414936}
   - component: {fileID: 3153791289876870908}
   - component: {fileID: 2152095267492361812}
-  - component: {fileID: 6505071060461476104}
   - component: {fileID: 8533488614872964833}
   m_Layer: 0
   m_Name: Attribute name text
@@ -2853,14 +2757,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8580423717092428871}
   m_Mesh: {fileID: 0}
---- !u!222 &6505071060461476104
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8580423717092428871}
-  m_CullTransparentMesh: 0
 --- !u!114 &8533488614872964833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2964,7 +2860,6 @@ GameObject:
   - component: {fileID: 6484010540384105525}
   - component: {fileID: 4559867458061872703}
   - component: {fileID: 4283335141413464026}
-  - component: {fileID: 8437629770632558296}
   - component: {fileID: 6351518864926738280}
   m_Layer: 0
   m_Name: Percent of active text
@@ -3043,14 +2938,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9122693330748157474}
   m_Mesh: {fileID: 0}
---- !u!222 &8437629770632558296
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9122693330748157474}
-  m_CullTransparentMesh: 0
 --- !u!114 &6351518864926738280
 MonoBehaviour:
   m_ObjectHideFlags: 0
