@@ -24,8 +24,8 @@
     flex-wrap: nowrap;
     flex-grow: 0;
     display: flex;
-    -unity-font-definition: resource('');
-    -unity-font: resource('');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
     font-size: 17px;
     letter-spacing: 8px;
     -unity-font-style: normal;
@@ -40,6 +40,8 @@
     margin-top: 3px;
     margin-bottom: 3px;
     justify-content: space-between;
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
 
 .input-argument > .unity-base-field__input {
@@ -60,8 +62,8 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding-left: 10px;
-    -unity-font: resource('StyleSheets/UnityDefaultRuntimeTheme');
-    -unity-font-definition: none;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
     -unity-font-style: normal;
     font-size: 18px;
 }
@@ -71,10 +73,14 @@
     border-right-color: rgb(255, 162, 0);
     border-top-color: rgb(255, 162, 0);
     border-bottom-color: rgb(255, 162, 0);
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
 
 .button:active {
     background-color: rgb(255, 162, 0);
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .input-card {
@@ -97,8 +103,8 @@
     padding-bottom: 3px;
     flex-grow: 0;
     align-items: stretch;
-    -unity-font-definition: none;
-    -unity-font: resource('');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out-sine;
 }
@@ -111,6 +117,8 @@
     border-bottom-color: rgb(145, 255, 112);
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out-sine;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .input-card-header-container {
@@ -122,6 +130,8 @@
     background-color: rgba(0, 0, 0, 0);
     margin-left: 14px;
     padding-right: 2px;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .input-card-header {
@@ -146,14 +156,16 @@
     margin-bottom: 0;
     color: rgb(0, 220, 255);
     -unity-font-style: normal;
-    -unity-font: resource('');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
     font-size: 16px;
     letter-spacing: 6px;
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .inactive {
     display: none;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .done-label {
@@ -181,6 +193,8 @@
     padding-top: 6px;
     padding-bottom: 6px;
     color: rgb(67, 207, 11);
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .running-label {
@@ -190,13 +204,15 @@
     height: 46px;
     align-items: center;
     justify-content: center;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .message-label {
     color: rgb(255, 98, 0);
     display: none;
-    -unity-font-definition: none;
-    -unity-font: url('project://database/Assets/Fonts/SpaceGrotesk-Regular.ttf?fileID=12800000&guid=7bcf7850b816ff0468a71ae45219f924&type=3#SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular.ttf?fileID=12800000&guid=7bcf7850b816ff0468a71ae45219f924&type=3#SpaceGrotesk-Regular');
     -unity-font-style: normal;
 }
 
@@ -212,6 +228,8 @@
     max-height: none;
     min-width: auto;
     min-height: auto;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .main-header {
@@ -221,6 +239,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     -unity-font: resource('Fonts & Materials/Oswald-Bold');
+    -unity-font-definition: resource('Fonts & Materials/Oswald-Bold SDF');
 }
 
 .option-button {
@@ -249,8 +268,8 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    -unity-font-definition: none;
-    -unity-font: url('project://database/Assets/Fonts/SpaceGrotesk-Regular.ttf?fileID=12800000&guid=7bcf7850b816ff0468a71ae45219f924&type=3#SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular.ttf?fileID=12800000&guid=7bcf7850b816ff0468a71ae45219f924&type=3#SpaceGrotesk-Regular');
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out-sine;
 }
@@ -271,7 +290,7 @@
     background-color: rgb(0, 0, 0);
     -unity-background-image-tint-color: rgb(255, 255, 255);
     -unity-font-definition: resource('Fonts & Materials/Bangers SDF');
-    -unity-font: resource('Fonts & Materials/Anton');
+    -unity-font: resource('Fonts & Materials/Bangers');
 }
 
 .option-card-label {
@@ -279,8 +298,8 @@
     padding-right: 9px;
     padding-top: 9px;
     padding-bottom: 9px;
-    -unity-font-definition: none;
-    -unity-font: resource('');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
     font-size: 20px;
     letter-spacing: 0;
     border-left-color: rgb(255, 255, 255);
@@ -302,6 +321,8 @@
     background-color: rgb(91, 91, 91);
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(91, 91, 91);
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .card-image:hover {
@@ -309,6 +330,8 @@
     transition-timing-function: ease-in-out-sine;
     transition-duration: 0.4s;
     transition-property: all;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .option-button:hover {
@@ -319,6 +342,8 @@
     border-bottom-color: rgb(145, 255, 112);
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out-sine;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .option-button:hover .card-image {
@@ -326,6 +351,8 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out-sine;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .sponsor-logo {
@@ -351,11 +378,12 @@
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -unity-font: resource('Fonts & Materials/Oswald-Bold');
+    -unity-font-definition: resource('Fonts & Materials/Oswald-Bold SDF');
 }
 
 .subheader {
     font-size: 46px;
-    -unity-font-definition: none;
+    -unity-font-definition: resource('Fonts & Materials/Oswald-Bold SDF');
     -unity-font: resource('Fonts & Materials/Oswald-Bold');
     -unity-text-align: middle-left;
     white-space: nowrap;
@@ -376,8 +404,8 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    -unity-font: resource('');
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .back-button {
@@ -385,6 +413,7 @@
     left: 0;
     top: 0;
     -unity-font: resource('Fonts & Materials/Oswald-Bold');
+    -unity-font-definition: resource('Fonts & Materials/Oswald-Bold SDF');
 }
 
 .option-button:hover .option-card-label {
@@ -392,6 +421,7 @@
     -unity-font: resource('Fonts & Materials/Oswald-Bold');
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out-sine;
+    -unity-font-definition: resource('Fonts & Materials/Oswald-Bold SDF');
 }
 
 .gear-icon {
@@ -404,18 +434,22 @@
     height: 46px;
     display: flex;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .unity-radio-button:checked > .unity-label {
     color: rgb(0, 255, 32);
     transition-duration: 0.1s;
     transition-timing-function: ease-in-out-sine;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .input-field-label {
     -unity-background-image-tint-color: rgb(255, 255, 255);
     flex-direction: row-reverse;
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
     -unity-text-align: middle-left;
     -unity-font-style: normal;
     letter-spacing: 4px;
@@ -427,16 +461,18 @@
     align-items: center;
     flex-grow: 0;
     white-space: normal;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
 
 .unity-radio-button > .unity-label {
     color: rgb(255, 255, 255);
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
     -unity-font-style: normal;
     font-size: 24px;
     -unity-text-align: middle-left;
     flex-direction: row;
     align-items: center;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
 
 .unity-radio-button {
@@ -447,19 +483,23 @@
     font-size: 10px;
     align-items: center;
     flex-shrink: 0;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
+    -unity-font-definition: resource('Fonts & Materials/SpaceGrotesk-Regular SDF_fontasset');
 }
 
 .input-text-field {
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
     flex-direction: row-reverse;
     align-items: center;
     font-size: 16px;
     color: rgb(255, 255, 255);
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
 
 .button {
-    -unity-font-definition: url('project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
+    -unity-font-definition: url('project://database/Assets/Resources/Fonts%20&%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&guid=129b770ca1ffd9f409ff7a3813fb3b68&type=2#SpaceGrotesk-Regular SDF_fontasset');
     -unity-font-style: normal;
     color: rgb(255, 255, 255);
     display: flex;
+    -unity-font: resource('Fonts & Materials/SpaceGrotesk-Regular');
 }
