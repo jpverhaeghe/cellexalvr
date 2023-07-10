@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/DesktopUI/mainStyleSheet.uss?fileID=7433441132597879392&amp;guid=9c1933af9180dd647920416a67c9a28c&amp;type=3#mainStyleSheet" />
-    <ui:VisualElement name="screen" style="text-shadow: 0 0 0 rgb(255, 255, 255); color: rgb(255, 255, 255); flex-grow: 1; background-color: rgba(0, 0, 0, 0); font-size: 14px; -unity-font-style: normal; letter-spacing: 7px; justify-content: space-between; align-items: center;">
+    <Style src="project://database/Assets/Resources/StyleSheets/mainStyleSheet.uss?fileID=7433441132597879392&amp;guid=9c1933af9180dd647920416a67c9a28c&amp;type=3#mainStyleSheet" />
+    <ui:VisualElement name="screen" style="text-shadow: 0 0 0 rgb(255, 255, 255); color: rgb(255, 255, 255); flex-grow: 1; background-color: rgba(0, 0, 0, 0); font-size: 14px; -unity-font-style: normal; letter-spacing: 7px; justify-content: space-between; align-items: center; -unity-font: resource(&apos;Fonts &amp; Materials/SpaceGrotesk-Regular&apos;); -unity-font-definition: resource(&apos;Fonts &amp; Materials/SpaceGrotesk-Regular SDF_fontasset&apos;);">
         <ui:VisualElement name="main-header" class="main-header" style="display: none;">
             <ui:IMGUIContainer name="main-header-logo" class="header-logo" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="align-items: center; justify-content: center; flex-direction: column; flex-grow: 1; border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; background-color: rgba(255, 255, 255, 0);">
+    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="align-items: center; justify-content: center; flex-direction: column; flex-grow: 1; border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; background-color: rgba(255, 255, 255, 0); -unity-font-definition: resource(&apos;Fonts &amp; Materials/SpaceGrotesk-Regular SDF_fontasset&apos;); -unity-font: resource(&apos;Fonts &amp; Materials/SpaceGrotesk-Regular&apos;);">
         <ui:VisualElement style="align-items: center; background-color: rgba(0, 0, 0, 0);">
             <ui:VisualElement name="Menu" style="flex-grow: 0; align-items: stretch; background-color: rgba(89, 89, 89, 0); -unity-background-image-tint-color: rgb(0, 165, 255); border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-left-width: 8px; border-right-width: 8px; border-top-width: 8px; border-bottom-width: 8px;">
                 <ui:VisualElement name="buttons" style="flex-grow: 0; justify-content: flex-start; align-items: stretch;">
@@ -23,7 +23,7 @@
                                             <ui:Label text="OK" display-tooltip-when-elided="true" style="-unity-font-style: normal;" />
                                         </ui:VisualElement>
                                     </ui:VisualElement>
-                                    <ui:Label text="Please enter a label (e.g. my_data)&#x9;" display-tooltip-when-elided="true" name="file-message-label" class="message-label" style="-unity-font-definition: url(&apos;project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&amp;guid=129b770ca1ffd9f409ff7a3813fb3b68&amp;type=2#SpaceGrotesk-Regular SDF_fontasset&apos;);" />
+                                    <ui:Label text="Please enter a label (e.g. my_data)&#x9;" display-tooltip-when-elided="true" name="file-message-label" class="message-label" style="-unity-font-definition: url(&apos;project://database/Assets/Resources/Fonts%20&amp;%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&amp;guid=129b770ca1ffd9f409ff7a3813fb3b68&amp;type=2#SpaceGrotesk-Regular SDF_fontasset&apos;);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="fileheader" class="input-card-header-container">
                                     <ui:Label text="CHOOSE RAW DATA FILE" display-tooltip-when-elided="true" name="choose-file-header" enable-rich-text="true" class="input-argument input-card-header" />
@@ -166,7 +166,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="output-container" style="width: 856px; height: 120px;">
-                <ui:Label display-tooltip-when-elided="true" name="output-label" style="color: rgb(71, 255, 0); -unity-font-definition: url(&apos;project://database/Assets/Fonts/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&amp;guid=129b770ca1ffd9f409ff7a3813fb3b68&amp;type=2#SpaceGrotesk-Regular SDF_fontasset&apos;);" />
+                <ui:Label display-tooltip-when-elided="true" name="output-label" style="color: rgb(71, 255, 0); -unity-font-definition: url(&apos;project://database/Assets/Resources/Fonts%20&amp;%20Materials/SpaceGrotesk-Regular%20SDF_fontasset.asset?fileID=11400000&amp;guid=129b770ca1ffd9f409ff7a3813fb3b68&amp;type=2#SpaceGrotesk-Regular SDF_fontasset&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:ScrollView>
