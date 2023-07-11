@@ -1,9 +1,8 @@
-using CellexalVR.Interaction;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using CellexalVR.General;
 using UnityEngine.XR.Interaction.Toolkit;
+
+using CellexalVR.AnalysisObjects;
+using CellexalVR.General;
 
 public class PopoutCanvasWebBrowserManager : FullCanvasWebBrowserManager
 {

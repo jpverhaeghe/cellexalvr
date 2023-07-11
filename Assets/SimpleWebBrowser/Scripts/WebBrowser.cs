@@ -1,13 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
-using System.Text;
 //using System.Diagnostics;
 using MessageLibrary;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using CellexalVR.AnalysisObjects;
 using CellexalVR.General;
-using CellexalVR.Interaction;
 
 namespace SimpleWebBrowser
 {
@@ -553,7 +550,7 @@ namespace SimpleWebBrowser
             //    OnTriggerUp();
             //}
             // If sockets get disconnected or similar error we need to recreate object.
-            if (webManager.isVisible)
+            //if (webManager.isVisible)
             {
                 try
                 {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using Vuplex.WebView;
 using TMPro;
-using CellexalVR.Interaction;
+using CellexalVR.AnalysisObjects;
 using CellexalVR.General;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;

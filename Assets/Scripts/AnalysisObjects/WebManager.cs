@@ -1,15 +1,14 @@
 ﻿using CellexalVR.General;
+using CellexalVR.Menu.Buttons;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using Vuplex.WebView;
 
-namespace CellexalVR.Interaction
+namespace CellexalVR.AnalysisObjects
 {
     /// <summary>
-    /// Keyboard for web browser. Enter key sends output to navigate function in web browser.
+    /// Manages the browser windows for the data sets
     /// </summary>
     public class WebManager : MonoBehaviour
     {
@@ -19,12 +18,16 @@ namespace CellexalVR.Interaction
         [SerializeField] GameObject browserWindowPrefab;
         [SerializeField] GameObject popoutWindowPrefab;
 
+        [Header("Buttons associated with the Web Manager")]
+        [SerializeField] CellexalToolButton webBrowserVisibilityButton;
+        [SerializeField] CellexalButton resetWebBrowserButton;
+
         public TMPro.TextMeshPro output;
-        public bool isVisible;
         public ReferenceManager referenceManager;
 
         private Dictionary<int, GameObject> browserWindows;
         private int lastBrowserID = 0;
+        private bool isVisible;
 
         private void OnValidate()
         {
@@ -41,11 +44,12 @@ namespace CellexalVR.Interaction
             // https://developer.vuplex.com/webview/Web#SetUserAgent
             Web.SetUserAgent(false);
 
+            // set up a list to store the browser windows
+            browserWindows = new Dictionary<int, GameObject>();
+
             //SetVisible(false);
 
-            // set up a list to store the browser windows
-            // TODO - will need to have the browsers remove themselves with a method
-            browserWindows = new Dictionary<int, GameObject>();
+            CellexalEvents.GraphsLoaded.AddListener(CreateBrowserSession);
         }
 
         /// <summary>
@@ -121,6 +125,10 @@ namespace CellexalVR.Interaction
             referenceManager.multiuserMessageSender.SendMessageBrowserEnter();
         }
 
+        /// <summary>
+        /// Will reset the main window if all windows were closed, only if active is true
+        /// </summary>
+        /// <param name="active"></param>
         public void SetBrowserActive(bool active)
         {
             if (active && (browserWindows.Count <= 0))
@@ -129,17 +137,68 @@ namespace CellexalVR.Interaction
                 CreateNewWindow(gameObject.transform, default_url);
             }
 
-            //SetVisible(active);
-
         } // end SetBrowserActive
 
+        /// <summary>
+        /// Hides or shows browser windows based on visible parameter
+        /// </summary>
+        /// <param name="visible">True to show windows, false to hide them</param>
         public void SetVisible(bool visible)
         {
             foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
             {
                 browserWindow.Value.SetActive(visible);
             }
-        }
 
+            isVisible = visible;
+
+        } // end SetVisible
+
+        /// <summary>
+        /// Resets the browser to the base browser state - original window open
+        /// </summary>
+        public void ResetBrowser()
+        {
+            // go through all currently open windows and close them
+            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            {
+                Destroy(browserWindow.Value);
+            }
+
+            // remove all windows from the dictionary and reset the id
+            browserWindows.Clear();
+            lastBrowserID = 0;
+
+            // create the initial window
+            SetBrowserActive(true);
+
+            // hide the browser windows if the browser was hidden before
+            if (!isVisible)
+            {
+                SetVisible(false);
+            }
+
+        } // end ResetBrowser
+
+        /// <summary>
+        /// A listener of the web manager to call once the graphs have been loaded for a particular data set
+        /// </summary>
+        private void CreateBrowserSession()
+        {
+            // first set up the browser buttons as active
+            webBrowserVisibilityButton.SetButtonActivated(true);
+            resetWebBrowserButton.SetButtonActivated(true);
+
+            // show the browser window(s)
+            // TODO: add code to load the last session data from the Data folder for this selection
+            webBrowserVisibilityButton.Click();
+
+            // go through the graphs and mark them as hidden to begin with
+            foreach (Graph graph in referenceManager.graphManager.Graphs)
+            {
+                graph.HideGraph();
+            }
+
+        } // end CreateBrowserSession
     }
 }
