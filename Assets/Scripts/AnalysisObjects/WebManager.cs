@@ -50,6 +50,7 @@ namespace CellexalVR.AnalysisObjects
             //SetVisible(false);
 
             CellexalEvents.GraphsLoaded.AddListener(CreateBrowserSession);
+            //CellexalEvents.GraphsUnloaded.AddListener(ClearBrowserSession);
         }
 
         /// <summary>
@@ -200,5 +201,22 @@ namespace CellexalVR.AnalysisObjects
             }
 
         } // end CreateBrowserSession
+
+        public void ClearBrowserSession()
+        {
+            // to set the laser pointers back to being not in use for now, check to see if they are
+            if (isVisible)
+            {
+                //webBrowserVisibilityButton.Click();
+                SetVisible(false);
+            }
+
+            // first set up the browser buttons as inactive
+            webBrowserVisibilityButton.SetButtonActivated(false);
+            resetWebBrowserButton.SetButtonActivated(false);
+
+            // TODO: leaving current state of web browsers for now, need to make it so it loads from data
+
+        } // end ClearBrowserSession
     }
 }

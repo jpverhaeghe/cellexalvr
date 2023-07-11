@@ -1,3 +1,4 @@
+using CellexalVR.AnalysisObjects;
 using CellexalVR.Interaction;
 using UnityEngine;
 namespace CellexalVR.Menu.Buttons.General
@@ -50,6 +51,9 @@ namespace CellexalVR.Menu.Buttons.General
             referenceManager.loaderController.ResetFolders(deleteSceneObjs);
             referenceManager.multiuserMessageSender.SendMessageLoadingMenu(deleteSceneObjs);
             referenceManager.pdfMesh.gameObject.SetActive(false);
+
+            // adding closing of browser manager window
+            referenceManager.webManager.GetComponent<WebManager>().ClearBrowserSession();
         }
 
         //void CloseSubMenu()
