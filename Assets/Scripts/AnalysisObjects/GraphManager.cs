@@ -2,12 +2,10 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using System.Linq;
 using CellexalVR.General;
 using CellexalVR.AnalysisLogic;
 using CellexalVR.DesktopUI;
 using CellexalVR.Spatial;
-using CellexalVR.AnalysisLogic;
 using SQLiter;
 using System.IO;
 using System.Diagnostics;
@@ -37,6 +35,7 @@ namespace CellexalVR.AnalysisObjects
         private List<NetworkHandler> networks = new List<NetworkHandler>();
         private bool axesVisible;
         private ArrayList expressionValues;
+        private bool graphsVisible;
 
         /// <summary>
         /// The different methods for coloring graphs by gene expression. The different options are:
@@ -618,6 +617,41 @@ namespace CellexalVR.AnalysisObjects
             {
                 g.SetAxesVisible(axesVisible);
             }
+        }
+
+        public void ShowGraphs()
+        {
+            // go through the graphs and mark them as hidden to begin with
+            foreach (Graph graph in Graphs)
+            {
+                graph.ShowGraph();
+            }
+
+            graphsVisible = true;
+        }
+
+        public void HideGraphs()
+        {
+            // go through the graphs and mark them as hidden to begin with
+            foreach (Graph graph in Graphs)
+            {
+                graph.HideGraph();
+            }
+
+            graphsVisible = false;
+        }
+
+        public void ToggleGraphs()
+        {
+            if (graphsVisible)
+            {
+                HideGraphs();
+            }
+            else
+            {
+                ShowGraphs();
+            }
+
         }
 
     }

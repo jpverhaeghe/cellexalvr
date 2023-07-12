@@ -21,6 +21,7 @@ namespace CellexalVR.AnalysisObjects
         [Header("Buttons associated with the Web Manager")]
         [SerializeField] CellexalToolButton webBrowserVisibilityButton;
         [SerializeField] CellexalButton resetWebBrowserButton;
+        [SerializeField] GameObject graphButton;
 
         public TMPro.TextMeshPro output;
         public ReferenceManager referenceManager;
@@ -195,10 +196,11 @@ namespace CellexalVR.AnalysisObjects
             webBrowserVisibilityButton.Click();
 
             // go through the graphs and mark them as hidden to begin with
-            foreach (Graph graph in referenceManager.graphManager.Graphs)
-            {
-                graph.HideGraph();
-            }
+            referenceManager.graphManager.HideGraphs();
+
+            // show the button for hiding and showing graphs
+            // TODO: This should be moved elsewhere as it really isn't part of web management
+            graphButton.SetActive(true);
 
         } // end CreateBrowserSession
 
@@ -214,6 +216,10 @@ namespace CellexalVR.AnalysisObjects
             // first set up the browser buttons as inactive
             webBrowserVisibilityButton.SetButtonActivated(false);
             resetWebBrowserButton.SetButtonActivated(false);
+
+            // hide the button for hiding and showing graphs
+            // TODO: This should be moved elsewhere as it really isn't part of web management
+            graphButton.SetActive(false);
 
             // TODO: leaving current state of web browsers for now, need to make it so it loads from data
 
