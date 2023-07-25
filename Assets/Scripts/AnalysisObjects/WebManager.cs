@@ -1,6 +1,7 @@
 ﻿using CellexalVR.General;
 using CellexalVR.Menu.Buttons;
 using System.Collections.Generic;
+using System.IO;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using Vuplex.WebView;
@@ -12,8 +13,14 @@ namespace CellexalVR.AnalysisObjects
     /// </summary>
     public class WebManager : MonoBehaviour
     {
-        public const string default_url = "https://mdv.molbiol.ox.ac.uk/projects";
+        // Constant strings for this class
+        //public const string default_url =
+        //    "https://mdv-dev.netlify.app/?dir=https://mdvstatic.netlify.app/ATRTImages2&socket=http://localhost:5050";
+        public const string default_url = "http://localhost:5050/?view=default";
+        //public const string default_url = "https://mdv.molbiol.ox.ac.uk/projects";
         //"https://datashare.molbiol.ox.ac.uk/public/project/Wellcome_Discovery/sergeant/pbmc1k";
+        public const string browserConfigFilename = "/BrowserConfigData.json";
+
         [Header("The prefab for all browser window instances")]
         [SerializeField] GameObject browserWindowPrefab;
         [SerializeField] GameObject popoutWindowPrefab;
@@ -48,20 +55,28 @@ namespace CellexalVR.AnalysisObjects
             // set up a list to store the browser windows
             browserWindows = new Dictionary<int, GameObject>();
 
-            //SetVisible(false);
-
             CellexalEvents.GraphsLoaded.AddListener(CreateBrowserSession);
             //CellexalEvents.GraphsUnloaded.AddListener(ClearBrowserSession);
         }
 
         /// <summary>
-        /// Creates a new browser window relative to the window creating it
+        /// Creates a new browser window relative to the window creating it, 
+        /// and offsets it by a little if the boolean is true
         /// </summary>
-        public GameObject CreateNewWindow(Transform browserTransform, string url)
+        /// <param name="browserPos">Where the browser window should appear in the world</param>
+        /// <param name="browserRotation">The beginning rotation of the browser</param>
+        /// <param name="url">the url to display</param>
+        /// <param name="offsetZ">Whether or not to offset this window a little in front</param>
+        /// <returns>The web browser canvas game object</returns>
+        public GameObject CreateNewWindow(Vector3 browserPos, Quaternion browserRotation,
+                                          string url, bool offsetZ)
         {
-            Vector3 newPos = browserTransform.position;
-            newPos.z -= 0.01f;
-            GameObject newWindow = Instantiate(browserWindowPrefab, newPos, browserTransform.rotation);
+            if (offsetZ)
+            {
+                browserPos.z -= 0.01f;
+            }
+
+            GameObject newWindow = Instantiate(browserWindowPrefab, browserPos, browserRotation);
 
             // set up the initial url to see if it works without loading
             newWindow.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>().InitialUrl = url;
@@ -74,6 +89,17 @@ namespace CellexalVR.AnalysisObjects
             return newWindow;
 
         } // end CreateNewWindow
+
+        /// <summary>
+        /// Creates a new browser window relative to the window creating it 
+        /// </summary>
+        /// <param name="browserTransform">Where the browser window should appear</param>
+        /// <param name="url">the url to display</param>
+        /// <returns>The web browser canvas game object</returns>
+        public GameObject CreateNewWindow(Transform browserTransform, string url)
+        {
+            return (CreateNewWindow(browserTransform.position, browserTransform.rotation, url, true));
+        }
 
         /// <summary>
         /// Creates a new browser window relative to the window creating it
@@ -96,6 +122,14 @@ namespace CellexalVR.AnalysisObjects
             // store the object so it can be set to invisible if the browser is turned off
             newWindow.GetComponent<FullCanvasWebBrowserManager>().browserID = lastBrowserID;
             browserWindows.Add(lastBrowserID++, newWindow);
+
+            // for now, if the graphs are not visible, make them visible.
+            // TODO: This will need to know what pop-out was generated and what graph it is associated with
+            if (!referenceManager.graphManager.GraphsVisible)
+            {
+                referenceManager.graphManager.ShowGraphs();
+            }
+
             return newWindow;
 
         } // end CreateNewWindow
@@ -115,6 +149,7 @@ namespace CellexalVR.AnalysisObjects
         } // end RemoveBrowserWindowFromScene
 
         // TODO: Update this to use a different output text and use 3D Web View keyboard
+        // - May not be necessary
         public void EnterKey()
         {
             print("Navigate to - " + output.text);
@@ -161,15 +196,7 @@ namespace CellexalVR.AnalysisObjects
         /// </summary>
         public void ResetBrowser()
         {
-            // go through all currently open windows and close them
-            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
-            {
-                Destroy(browserWindow.Value);
-            }
-
-            // remove all windows from the dictionary and reset the id
-            browserWindows.Clear();
-            lastBrowserID = 0;
+            DestroyCurrentBrowsers();
 
             // create the initial window
             SetBrowserActive(true);
@@ -183,6 +210,23 @@ namespace CellexalVR.AnalysisObjects
         } // end ResetBrowser
 
         /// <summary>
+        /// Destroys all current browswer windows, clears the dictionary and resets the browser id counter
+        /// </summary>
+        public void DestroyCurrentBrowsers()
+        {
+            // go through all currently open windows and close them
+            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            {
+                Destroy(browserWindow.Value);
+            }
+
+            // remove all windows from the dictionary and reset the id
+            browserWindows.Clear();
+            lastBrowserID = 0;
+
+        } // end DestroyCurrentBrowsers
+
+        /// <summary>
         /// A listener of the web manager to call once the graphs have been loaded for a particular data set
         /// </summary>
         private void CreateBrowserSession()
@@ -191,8 +235,10 @@ namespace CellexalVR.AnalysisObjects
             webBrowserVisibilityButton.SetButtonActivated(true);
             resetWebBrowserButton.SetButtonActivated(true);
 
-            // show the browser window(s)
-            // TODO: add code to load the last session data from the Data folder for this selection
+            // load the last session data from the Data folder for this selection
+            LoadBrowserSession();
+
+            // show the browser window(s) and set up the double lasers
             webBrowserVisibilityButton.Click();
 
             // go through the graphs and mark them as hidden to begin with
@@ -206,12 +252,11 @@ namespace CellexalVR.AnalysisObjects
 
         public void ClearBrowserSession()
         {
-            // to set the laser pointers back to being not in use for now, check to see if they are
-            if (isVisible)
-            {
-                //webBrowserVisibilityButton.Click();
-                SetVisible(false);
-            }
+            // save the browser session as it is
+            SaveBrowserSession();
+
+            // remove browsers as they will be loaded from data next time
+            DestroyCurrentBrowsers();
 
             // first set up the browser buttons as inactive
             webBrowserVisibilityButton.SetButtonActivated(false);
@@ -221,8 +266,80 @@ namespace CellexalVR.AnalysisObjects
             // TODO: This should be moved elsewhere as it really isn't part of web management
             graphButton.SetActive(false);
 
-            // TODO: leaving current state of web browsers for now, need to make it so it loads from data
-
         } // end ClearBrowserSession
+
+        /// <summary>
+        /// Saves the current browser session to a JSON file in the project data folder, 
+        /// creating it if it doesn't exist
+        /// </summary>
+        private void SaveBrowserSession()
+        {
+            string path = CellexalUser.DatasetFullPath + browserConfigFilename;
+
+            // set up the web browser configuration save data
+            BrowserSaveData browserSaveData = new BrowserSaveData();
+
+            // create the json data using the current browser windows
+            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            {
+                FullCanvasWebBrowserManager browserCanvas = 
+                    browserWindow.Value.GetComponent<FullCanvasWebBrowserManager>();
+
+                // TODO: only adding the main windows for now, will add pop-outs later
+                if (browserCanvas.GetType() != typeof(PopoutCanvasWebBrowserManager))
+                {
+                    BrowserConfigData browserData = new BrowserConfigData();
+                    browserData.startingURL = browserCanvas.urlInputField.text;
+                    browserData.startingPosition = browserCanvas.transform.position;
+                    browserData.startingRotation = browserCanvas.transform.rotation;
+                    browserData.startingScale = browserCanvas.transform.localScale;
+                    browserSaveData.browserConfigData.Add(browserData);
+                }
+            }
+
+            // write the file to the data directory to be used later
+            string json = JsonUtility.ToJson(browserSaveData);
+            File.WriteAllText(path, json);
+
+            Debug.Log("Saving data to: " + path);
+
+        } // end SaveBrowserSession
+
+        /// <summary>
+        /// Loads the last web browser state if it was saved before
+        /// </summary>
+        private void LoadBrowserSession()
+        {
+            string path = CellexalUser.DatasetFullPath + browserConfigFilename;
+
+            // set up the web browser configuration save data
+            BrowserSaveData browserSaveData = new BrowserSaveData();
+
+            // only load the previous configuration if it has been saved
+            if (File.Exists(path))
+            {
+                Debug.Log("Loading data from: " + path);
+
+                // read the file and parse it into the json variable
+                string json = File.ReadAllText(path);
+                browserSaveData = JsonUtility.FromJson<BrowserSaveData>(json);
+
+                // load each page and set up the transforms
+                foreach (BrowserConfigData browserData in browserSaveData.browserConfigData)
+                {
+                    // create the web page with the saved url
+                    GameObject browserCanvas = CreateNewWindow(browserData.startingPosition, 
+                                                               browserData.startingRotation,
+                                                               browserData.startingURL, false);
+
+                    browserCanvas.transform.localScale = browserData.startingScale;
+                }
+            }
+            else
+            {
+                Debug.Log("No configuration file found, loading standard setup");
+            }
+
+        } // end LoadBrowserSession
     }
 }

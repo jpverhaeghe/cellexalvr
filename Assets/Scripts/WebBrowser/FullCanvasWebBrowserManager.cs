@@ -14,7 +14,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     [SerializeField] CanvasWebViewPrefab _controlsWebViewPrefab;
     [SerializeField] CanvasWebViewPrefab _canvasWebViewPrefab;
     [SerializeField] CanvasKeyboard _keyboard;
-    [SerializeField] TMP_InputField urlInputField;
+    [SerializeField] public TMP_InputField urlInputField;
     //[SerializeField] Canvas canvas;
 
     // testing a key system to know what browser buttons are being invoked

@@ -63,6 +63,7 @@ namespace CellexalVR.AnalysisObjects
         public bool drawDebugGroups = false;
         public int drawDebugCubesOnLevel = -1;
 #endif
+        public bool GraphsVisible { get => graphsVisible; set => graphsVisible = value; }
 
         private void OnValidate()
         {
@@ -621,29 +622,29 @@ namespace CellexalVR.AnalysisObjects
 
         public void ShowGraphs()
         {
-            // go through the graphs and mark them as hidden to begin with
+            // go through the graphs and set them as shown
             foreach (Graph graph in Graphs)
             {
                 graph.ShowGraph();
             }
 
-            graphsVisible = true;
+            GraphsVisible = true;
         }
 
         public void HideGraphs()
         {
-            // go through the graphs and mark them as hidden to begin with
+            // go through the graphs and set them as hidden
             foreach (Graph graph in Graphs)
             {
                 graph.HideGraph();
             }
 
-            graphsVisible = false;
+            GraphsVisible = false;
         }
 
         public void ToggleGraphs()
         {
-            if (graphsVisible)
+            if (GraphsVisible)
             {
                 HideGraphs();
             }
