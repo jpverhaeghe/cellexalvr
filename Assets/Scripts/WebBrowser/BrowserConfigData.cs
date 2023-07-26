@@ -13,4 +13,6 @@ public class BrowserConfigData
     public Quaternion startingRotation;
     public Vector3 startingScale;
 
+    // config data for popouts to save for each window if there are any
+    public List<PopoutConfigData> popoutWindows = new List<PopoutConfigData>();
 }

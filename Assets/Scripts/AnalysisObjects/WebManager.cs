@@ -3,6 +3,7 @@ using CellexalVR.Menu.Buttons;
 using SimpleWebBrowser;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Transforms;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using Vuplex.WebView;
@@ -155,6 +156,18 @@ namespace CellexalVR.AnalysisObjects
             if (browserCanvas.GetType() != typeof(PopoutCanvasWebBrowserManager))
             {
                 RemovePopoutWindowsForMainBrowser(browserCanvas.browserID);
+            }
+            // since this is a popout, we need to remove it from its parent window
+            else
+            {
+                PopoutCanvasWebBrowserManager popoutCanvas = (PopoutCanvasWebBrowserManager)browserCanvas;
+
+                GameObject parentWindow;
+                
+                if (browserWindows.TryGetValue(popoutCanvas.parentID, out parentWindow)) 
+                {
+                    parentWindow.GetComponent<FullCanvasWebBrowserManager>().RemovePopoutWindow(popoutCanvas.popoutID);
+                }
             }
 
             // Destroy the parent browser object which will destroy all the child objects as well
@@ -310,11 +323,50 @@ namespace CellexalVR.AnalysisObjects
                 // TODO: only adding the main windows for now, will add pop-outs later
                 if (browserCanvas.GetType() != typeof(PopoutCanvasWebBrowserManager))
                 {
+                    // create the browser config data for this window
                     BrowserConfigData browserData = new BrowserConfigData();
+
+                    // store the url, position, rotation and scale
                     browserData.startingURL = browserCanvas.urlInputField.text;
                     browserData.startingPosition = browserCanvas.transform.position;
                     browserData.startingRotation = browserCanvas.transform.rotation;
                     browserData.startingScale = browserCanvas.transform.localScale;
+
+                    // find all popouts that belong to this window if there are any
+                    List<GameObject> popoutsToSave = FindAllPopoutWindowsForThisWindow(browserCanvas.browserID);
+                    
+                    // store the popout data if there are any
+                    foreach (GameObject popout in popoutsToSave)
+                    {
+                        // get the popout manager - we should only have popouts if the find all did its job well
+                        PopoutCanvasWebBrowserManager popoutCanvas = 
+                            popout.GetComponent<PopoutCanvasWebBrowserManager>();
+
+                        // create a variable to store the popout string data into
+                        string popoutDataMessage;
+
+                        // storing the popout data string if it exists
+                        if (browserCanvas.popoutWindowData.TryGetValue(popoutCanvas.popoutID, out popoutDataMessage))
+                        {
+                            PopoutConfigData popoutData = new PopoutConfigData();
+                            popoutData.startingPopoutMessage = popoutDataMessage;
+
+                            // store the position, rotation and scale
+                            popoutData.startingPosition = popout.transform.position;
+                            popoutData.startingRotation = popout.transform.rotation;
+                            popoutData.startingScale = popout.transform.localScale;
+
+                            // add the popout to the popout data list
+                            browserData.popoutWindows.Add(popoutData);
+                        }
+                        else
+                        {
+                            Debug.Log("Error: popout was in the window list, " +
+                                "but did not exist in the this browser window list!");
+                        }
+                    }
+
+                    // finally save the browser config data to the list of browser data
                     browserSaveData.browserConfigData.Add(browserData);
                 }
             }
@@ -381,10 +433,28 @@ namespace CellexalVR.AnalysisObjects
 
         } // end DestroyCurrentBrowsers
 
+        /// <summary>
+        /// Removes all the popouts associated with this browser
+        /// </summary>
+        /// <param name="parentID">the parent id for the browser to remove popouts</param>
         private void RemovePopoutWindowsForMainBrowser(int parentID)
         {
             // store the pop-outs in a list so they can be removed
-            List<PopoutCanvasWebBrowserManager> popOutWindowsToRemove = new List<PopoutCanvasWebBrowserManager>();
+            List<GameObject> popoutWindowsToRemove = FindAllPopoutWindowsForThisWindow(parentID);
+
+            // go through all the popouts associated with this browser window
+            foreach (GameObject popoutWindow in popoutWindowsToRemove)
+            {
+                browserWindows.Remove(popoutWindow.GetComponent<FullCanvasWebBrowserManager>().browserID);
+                Destroy(popoutWindow.gameObject);
+            }
+
+        } // RemovePopoutWindowsForMainBrowser
+
+        private List<GameObject> FindAllPopoutWindowsForThisWindow(int parentID)
+        {
+            // store the pop-outs in a list so they can be removed
+            List<GameObject> popoutWindows = new List<GameObject>();
 
             // need to go through the browser dictionary and remove any pop-outs associated with this window
             foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
@@ -398,18 +468,13 @@ namespace CellexalVR.AnalysisObjects
 
                     if (parentID == popOutCanvas.parentID)
                     {
-                        popOutWindowsToRemove.Add(popOutCanvas);
+                        popoutWindows.Add(popOutCanvas.gameObject);
                     }
                 }
             }
 
-            // go through all the pop-outs associated with this browser window
-            foreach (PopoutCanvasWebBrowserManager popOutWindow in popOutWindowsToRemove)
-            {
-                browserWindows.Remove(popOutWindow.browserID);
-                Destroy(popOutWindow.gameObject);
-            }
+            return popoutWindows;
 
-        } // RemovePopoutWindowsForMainBrowser
+        } // end FindAllPopoutWindowsForThisWindow
     }
 }
