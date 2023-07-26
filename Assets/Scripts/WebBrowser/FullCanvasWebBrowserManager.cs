@@ -96,7 +96,8 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
             Debug.Log("Popup opened with URL: " + eventArgs.Url);
 
             // using the web manager code to instatiate instead of doing it here
-            GameObject popupObject = webManagerScript.CreatePopOutWindow(gameObject.transform, eventArgs.WebView);
+            GameObject popupObject = 
+                webManagerScript.CreatePopOutWindow(gameObject.transform, eventArgs.WebView, this.browserID);
             CanvasWebViewPrefab popupPrefab = 
                 popupObject.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>();
             //popupPrefab.transform.SetParent(canvas.transform, false);

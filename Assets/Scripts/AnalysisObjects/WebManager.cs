@@ -1,5 +1,6 @@
 ﻿using CellexalVR.General;
 using CellexalVR.Menu.Buttons;
+using SimpleWebBrowser;
 using System.Collections.Generic;
 using System.IO;
 using Unity.XR.CoreUtils;
@@ -60,7 +61,7 @@ namespace CellexalVR.AnalysisObjects
         }
 
         /// <summary>
-        /// Creates a new browser window relative to the window creating it, 
+        /// Creates a new browser window at the coordinates and rotation with the given url, 
         /// and offsets it by a little if the boolean is true
         /// </summary>
         /// <param name="browserPos">Where the browser window should appear in the world</param>
@@ -71,21 +72,11 @@ namespace CellexalVR.AnalysisObjects
         public GameObject CreateNewWindow(Vector3 browserPos, Quaternion browserRotation,
                                           string url, bool offsetZ)
         {
-            if (offsetZ)
-            {
-                browserPos.z -= 0.01f;
-            }
-
-            GameObject newWindow = Instantiate(browserWindowPrefab, browserPos, browserRotation);
+            GameObject newWindow = SetupBrowserPrefab(browserWindowPrefab, browserPos, browserRotation, offsetZ);
 
             // set up the initial url to see if it works without loading
             newWindow.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>().InitialUrl = url;
 
-            // need to set the camera of the canvas object for this window
-            newWindow.GetComponent<Canvas>().worldCamera = Camera.main;
-
-            newWindow.GetComponent<FullCanvasWebBrowserManager>().browserID = lastBrowserID;
-            browserWindows.Add(lastBrowserID++, newWindow);
             return newWindow;
 
         } // end CreateNewWindow
@@ -102,26 +93,28 @@ namespace CellexalVR.AnalysisObjects
         }
 
         /// <summary>
-        /// Creates a new browser window relative to the window creating it
+        /// Creates a new browser popout window at the coordinates and rotation, 
+        /// and offsets it by a little if the boolean is true
         /// </summary>
-        public GameObject CreatePopOutWindow(Transform browserTransform, IWebView webView)
+        /// <param name="browserPos">Where the browser window should appear in the world</param>
+        /// <param name="browserRotation">The beginning rotation of the browser</param>
+        /// <param name="webView">The webview to link this popout to</param>
+        /// <param name="parentID">The parent ID of the main webView form which this was created</param>
+        /// <param name="offsetZ">Whether or not to offset this window a little in front</param>
+        /// <returns></returns>
+        public GameObject CreatePopOutWindow(Vector3 browserPos, Quaternion browserRotation, 
+                                             IWebView webView, int parentID, bool offsetZ)
         {
-            // set the position to be just in front of the last main window
-            Vector3 newPos = browserTransform.position;
-            newPos.z -= 0.01f;
-            GameObject newWindow = Instantiate(popoutWindowPrefab, newPos, browserTransform.rotation);
-
-            // need to set the camera of the canvas object for this window
-            newWindow.GetComponent<Canvas>().worldCamera = Camera.main;
+            // Create a popout prefab window game object
+            GameObject newWindow = SetupBrowserPrefab(popoutWindowPrefab, browserPos, browserRotation, offsetZ);
 
             // set up the pop out to look back at the previous web view
             CanvasWebViewPrefab popupPrefab =
                 newWindow.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>();
             popupPrefab.SetWebViewForInitialization(webView);
 
-            // store the object so it can be set to invisible if the browser is turned off
-            newWindow.GetComponent<FullCanvasWebBrowserManager>().browserID = lastBrowserID;
-            browserWindows.Add(lastBrowserID++, newWindow);
+            // store the parent window id so it can be set linked to that parent when saving and deleting
+            newWindow.GetComponent<PopoutCanvasWebBrowserManager>().parentID = parentID;
 
             // for now, if the graphs are not visible, make them visible.
             // TODO: This will need to know what pop-out was generated and what graph it is associated with
@@ -132,7 +125,21 @@ namespace CellexalVR.AnalysisObjects
 
             return newWindow;
 
-        } // end CreateNewWindow
+        } // end CreatePopOutWindow
+
+        /// <summary>
+        /// Creates a new browser popout window relative to the window creating it
+        /// </summary>
+        /// <param name="browserTransform">The transform of the window creating this window</param>
+        /// <param name="webView">The webview to link this popout to</param>
+        /// <param name="parentID">The parent ID of the main webView form which this was created</param>
+        /// <returns></returns>
+        public GameObject CreatePopOutWindow(Transform browserTransform, IWebView webView, int parentID)
+        {
+            return (CreatePopOutWindow(browserTransform.position, browserTransform.rotation, 
+                                       webView, parentID, true));
+
+        } // end CreatePopOutWindow
 
         /// <summary>
         /// Removes the browser window from the list of game objects being tracked by the browser manager
@@ -141,9 +148,17 @@ namespace CellexalVR.AnalysisObjects
         public void RemoveBrowserWindowFromScene(GameObject browserWindowToRemove)
         {
             // remove the game object from browser list
-            browserWindows.Remove(browserWindowToRemove.GetComponent<FullCanvasWebBrowserManager>().browserID);
+            FullCanvasWebBrowserManager browserCanvas = 
+                browserWindowToRemove.GetComponent<FullCanvasWebBrowserManager>();
+
+            // if this is a main window, remove any popouts associated with it
+            if (browserCanvas.GetType() != typeof(PopoutCanvasWebBrowserManager))
+            {
+                RemovePopoutWindowsForMainBrowser(browserCanvas.browserID);
+            }
 
             // Destroy the parent browser object which will destroy all the child objects as well
+            browserWindows.Remove(browserCanvas.browserID);
             Destroy(browserWindowToRemove);
 
         } // end RemoveBrowserWindowFromScene
@@ -194,7 +209,7 @@ namespace CellexalVR.AnalysisObjects
         /// <summary>
         /// Resets the browser to the base browser state - original window open
         /// </summary>
-        public void ResetBrowser()
+        public void ResetBrowserSession()
         {
             DestroyCurrentBrowsers();
 
@@ -207,24 +222,49 @@ namespace CellexalVR.AnalysisObjects
                 SetVisible(false);
             }
 
-        } // end ResetBrowser
+        } // end ResetBrowserSession
 
         /// <summary>
-        /// Destroys all current browswer windows, clears the dictionary and resets the browser id counter
+        /// Clears the current browser session, deleting all the browser windows and saving the layout for later
         /// </summary>
-        public void DestroyCurrentBrowsers()
+        public void ClearBrowserSession()
         {
-            // go through all currently open windows and close them
-            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            // save the browser session as it is
+            SaveBrowserSession();
+
+            // remove browsers as they will be loaded from data next time
+            DestroyCurrentBrowsers();
+
+            // first set up the browser buttons as inactive
+            webBrowserVisibilityButton.SetButtonActivated(false);
+            resetWebBrowserButton.SetButtonActivated(false);
+
+            // hide the button for hiding and showing graphs
+            // TODO: This should be moved elsewhere as it really isn't part of web management
+            graphButton.SetActive(false);
+
+        } // end ClearBrowserSession
+
+        private GameObject SetupBrowserPrefab(GameObject prefabToUse,Vector3 browserPos, 
+                                              Quaternion browserRotation, bool offsetZ)
+        {
+            if (offsetZ)
             {
-                Destroy(browserWindow.Value);
+                browserPos.z -= 0.01f;
             }
 
-            // remove all windows from the dictionary and reset the id
-            browserWindows.Clear();
-            lastBrowserID = 0;
+            GameObject newWindow = Instantiate(prefabToUse, browserPos, browserRotation);
 
-        } // end DestroyCurrentBrowsers
+            // need to set the camera of the canvas object for this window
+            newWindow.GetComponent<Canvas>().worldCamera = Camera.main;
+
+            // save the browser id and store the game object in the dictionary for access later
+            newWindow.GetComponent<FullCanvasWebBrowserManager>().browserID = lastBrowserID;
+            browserWindows.Add(lastBrowserID++, newWindow);
+
+            return newWindow;
+
+        } // end GameObject
 
         /// <summary>
         /// A listener of the web manager to call once the graphs have been loaded for a particular data set
@@ -249,24 +289,6 @@ namespace CellexalVR.AnalysisObjects
             graphButton.SetActive(true);
 
         } // end CreateBrowserSession
-
-        public void ClearBrowserSession()
-        {
-            // save the browser session as it is
-            SaveBrowserSession();
-
-            // remove browsers as they will be loaded from data next time
-            DestroyCurrentBrowsers();
-
-            // first set up the browser buttons as inactive
-            webBrowserVisibilityButton.SetButtonActivated(false);
-            resetWebBrowserButton.SetButtonActivated(false);
-
-            // hide the button for hiding and showing graphs
-            // TODO: This should be moved elsewhere as it really isn't part of web management
-            graphButton.SetActive(false);
-
-        } // end ClearBrowserSession
 
         /// <summary>
         /// Saves the current browser session to a JSON file in the project data folder, 
@@ -341,5 +363,53 @@ namespace CellexalVR.AnalysisObjects
             }
 
         } // end LoadBrowserSession
+
+        /// <summary>
+        /// Destroys all current browswer windows, clears the dictionary and resets the browser id counter
+        /// </summary>
+        private void DestroyCurrentBrowsers()
+        {
+            // go through all currently open windows and close them
+            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            {
+                Destroy(browserWindow.Value);
+            }
+
+            // remove all windows from the dictionary and reset the id
+            browserWindows.Clear();
+            lastBrowserID = 0;
+
+        } // end DestroyCurrentBrowsers
+
+        private void RemovePopoutWindowsForMainBrowser(int parentID)
+        {
+            // store the pop-outs in a list so they can be removed
+            List<PopoutCanvasWebBrowserManager> popOutWindowsToRemove = new List<PopoutCanvasWebBrowserManager>();
+
+            // need to go through the browser dictionary and remove any pop-outs associated with this window
+            foreach (KeyValuePair<int, GameObject> browserWindow in browserWindows)
+            {
+                FullCanvasWebBrowserManager browserCanvas =
+                    browserWindow.Value.GetComponent<FullCanvasWebBrowserManager>();
+
+                if (browserCanvas.GetType() == typeof(PopoutCanvasWebBrowserManager))
+                {
+                    PopoutCanvasWebBrowserManager popOutCanvas = (PopoutCanvasWebBrowserManager)browserCanvas;
+
+                    if (parentID == popOutCanvas.parentID)
+                    {
+                        popOutWindowsToRemove.Add(popOutCanvas);
+                    }
+                }
+            }
+
+            // go through all the pop-outs associated with this browser window
+            foreach (PopoutCanvasWebBrowserManager popOutWindow in popOutWindowsToRemove)
+            {
+                browserWindows.Remove(popOutWindow.browserID);
+                Destroy(popOutWindow.gameObject);
+            }
+
+        } // RemovePopoutWindowsForMainBrowser
     }
 }

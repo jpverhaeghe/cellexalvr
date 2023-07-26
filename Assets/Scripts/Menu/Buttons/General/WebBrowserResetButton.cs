@@ -24,7 +24,7 @@ namespace CellexalVR.Menu.Buttons.Tools
             //referenceManager.multiuserMessageSender.SendMessageActivateBrowser(toolActivated);
 
             // reset the browser on this machine to the original state
-            referenceManager.webManager.GetComponent<WebManager>().ResetBrowser();
+            referenceManager.webManager.GetComponent<WebManager>().ResetBrowserSession();
             //CellexalLog.Log("Reset web browser windows to oringial state - one window open");
 
         } // end Click

@@ -8,6 +8,7 @@ public class PopoutCanvasWebBrowserManager : FullCanvasWebBrowserManager
 {
     // This class only uses a small subset of the FullCanvasWebBrowserPrefab
     //  - the controls for clicking on the main window of the popout and the close button
+    public int parentID;
 
     /// <summary>
     /// Start is called before the first frame update to set up this object
