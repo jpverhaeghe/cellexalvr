@@ -38,7 +38,10 @@ namespace CellexalVR.AnalysisObjects
         private Dictionary<int, GameObject> browserWindows;
         private int lastBrowserID = 0;
         private bool isVisible;
-
+        
+        /// <summary>
+        /// When Unity validates this object in the editor, update the input reader reference manager
+        /// </summary>
         private void OnValidate()
         {
             if (gameObject.scene.IsValid())
@@ -47,7 +50,9 @@ namespace CellexalVR.AnalysisObjects
             }
         }
 
-        // Use this for initialization
+        /// <summary>
+        /// Use this for initialization
+        /// </summary>
         void Start()
         {
             // Use a desktop User-Agent to request the desktop versions of websites.
@@ -419,8 +424,8 @@ namespace CellexalVR.AnalysisObjects
                         MDVMessageData popoutMessageAsJson =
                             JsonUtility.FromJson<MDVMessageData>(browserData.popoutWindows[0].startingPopoutMessage);
 
-                        Debug.Log("A popout message as json for window " + mainBrowserManager.browserID + 
-                                  " - type: " + popoutMessageAsJson.type + ", chartID: " + popoutMessageAsJson.chartID);
+                        //Debug.Log("A popout message as json for window " + mainBrowserManager.browserID + 
+                        //          " - type: " + popoutMessageAsJson.type + ", chartID: " + popoutMessageAsJson.chartID);
                     }
                 }
             }
