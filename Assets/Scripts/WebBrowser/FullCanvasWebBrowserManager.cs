@@ -13,16 +13,18 @@ using System.Collections.Generic;
 public class FullCanvasWebBrowserManager : MonoBehaviour
 {
     // Canvas prefabs in the resource folder for Vulpex WebView
+    [SerializeField] public CanvasWebViewPrefab _canvasWebViewPrefab;
     [SerializeField] CanvasWebViewPrefab _controlsWebViewPrefab;
-    [SerializeField] CanvasWebViewPrefab _canvasWebViewPrefab;
     [SerializeField] CanvasKeyboard _keyboard;
     [SerializeField] public TMP_InputField urlInputField;
-    //[SerializeField] Canvas canvas;
 
     // testing a key system to know what browser buttons are being invoked
-    public Dictionary<int, string> popoutWindowData;
+    public Dictionary<int, PopoutConfigData> popoutWindowData;
+    public List<PopoutConfigData> loadedPopouts;
+    public PopoutConfigData tempPopoutConfigData;
     public int browserID;
     public int lastPopoutID;
+    public int currentPopoutID;
 
     // used by sub-classes
     protected WebManager webManagerScript;
@@ -72,7 +74,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         _canvasWebViewPrefab.WebView.LoadUrl("https://google.com");
 
         // set up the popout list for this window
-        popoutWindowData = new Dictionary<int, string>();
+        popoutWindowData = new Dictionary<int, PopoutConfigData>();
         lastPopoutID = 0;
 
         // set up a listener for messages so we can save the popout data
@@ -103,34 +105,18 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         webViewWithPopups.SetPopupMode(PopupMode.LoadInNewWebView);
 
         // set the message handler for the popup
-        webViewWithPopups.PopupRequested += async (webView, eventArgs) => {
-            Debug.Log("Popup opened with URL: " + eventArgs.Url);
-
-            // using the web manager code to instatiate instead of doing it here
-            GameObject popupObject = 
-                webManagerScript.CreatePopOutWindow(gameObject.transform, eventArgs.WebView, this.browserID);
-
-            CanvasWebViewPrefab popupPrefab = 
-                popupObject.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>();
-
-            // wait for the prefab to be initialized
-            await popupPrefab.WaitUntilInitialized();
-
-            // save the popout index into the popout list so we can use it to
-            // store the popout data later when saving browser locations
-            popupObject.GetComponent<PopoutCanvasWebBrowserManager>().popoutID = lastPopoutID++;
-
-            // Set up the closing of the popup - may not be needed
-            popupPrefab.WebView.CloseRequested += (popupWebView, closeEventArgs) => {
-                Debug.Log("Closing the popup");
-                CloseWindow();
-            };
-        };
+        webViewWithPopups.PopupRequested += CreatePopoutWindow;
 
         // testing to see if I can get input to work manually
         CellexalEvents.RightTriggerClick.AddListener(OnTriggerClick);
         CellexalEvents.RightTriggerPressed.AddListener(OnTriggerPressed);
-        CellexalEvents.RightTriggerUp.AddListener(OnTriggerUp); 
+        CellexalEvents.RightTriggerUp.AddListener(OnTriggerUp);
+
+        // debugging log messages
+        _canvasWebViewPrefab.WebView.ConsoleMessageLogged += (sender, eventArgs) => 
+        {
+            Debug.Log($"Console message logged: [{eventArgs.Level}] {eventArgs.Message}" + "from window: " + browserID);
+        };
     }
 
     /// <summary>
@@ -204,11 +190,11 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     /// <param name="popoutID">the popout window id for this window</param>
     public void RemovePopoutWindow(int popoutID)
     {
-        string popoutData;
+        PopoutConfigData popoutData;
 
         if (popoutWindowData.TryGetValue(popoutID, out popoutData))
         {
-            Debug.Log("Removing popout " + popoutData + " for window " + browserID);
+            Debug.Log("Removing popout " + popoutData.startingPopoutMessage + " for window " + browserID);
             popoutWindowData.Remove(popoutID);
         }
         else
@@ -430,14 +416,103 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         // for now, there should only be popout messages, so just deal with those
         if (eventArgs.Value.Contains("popout"))
         {
+            // create a popout config data to store this using the lastPopoutID and popout message
+            // TODO: Think about the timing issue for this as the message is received
+            // then the popout happens a little later (only on load browsers?)
+            PopoutConfigData popoutConfig = new PopoutConfigData();
+            currentPopoutID = lastPopoutID++;
+            popoutConfig.startingPopoutMessage = eventArgs.Value;
+
             // Save the data to the main browser popout list
-            popoutWindowData.Add(lastPopoutID, eventArgs.Value);
+            popoutWindowData.Add(currentPopoutID, popoutConfig);
 
             // For now just print out the current popoutlist
             Debug.Log("Window id " + this.browserID + " current popout window: " + eventArgs.Value);
         }
+        else if (eventArgs.Value.Contains("vuplex_ready"))
+        {
+            CreateLoadedPopouts();
+        }
 
     } // end MainCanvasOnMessageReceived
+
+    private async void CreateLoadedPopouts()
+    {
+        // only load popouts if the data list is not null (set up in the web manager)
+        if (loadedPopouts != null)
+        {
+            float waitTime = 2.5f;
+
+            // attempting to wait a bit to let MDV initialize the charts for this page
+            await Task.Delay(TimeSpan.FromSeconds(waitTime));
+
+            // this wait time is to avoid issues with another popout overwriting the temp data (race condition)
+            waitTime = 0.05f;
+
+            foreach (PopoutConfigData popoutData in loadedPopouts)
+            {
+                // store the popout data in the main window temp data for use in creating the window
+                tempPopoutConfigData = popoutData;
+
+                Debug.Log("Attempting to create a popout: " + popoutData.startingPopoutMessage +
+                          " for window: " + browserID);
+
+                // trying to use task here to wait for the popouts to fix race condition of updating popoutIDs
+                _canvasWebViewPrefab.WebView.PostMessage(popoutData.startingPopoutMessage);
+                await Task.Delay(TimeSpan.FromSeconds(waitTime));
+            }
+        }
+
+    } // end CreateLoadedPopouts
+
+    /// <summary>
+    /// Creates a popout window asyncronously when it is requested by a main webview
+    /// </summary>
+    /// <param name="sender">The sender of the request</param>
+    /// <param name="eventArgs">The popout data being sent down</param>
+    private async void CreatePopoutWindow(object sender, PopupRequestedEventArgs eventArgs)
+    {
+        //Debug.Log("Popup opened with URL: " + eventArgs.Url);
+
+        // using the web manager code to instatiate instead of doing it here
+        GameObject popoutObject =
+            webManagerScript.CreatePopOutWindow(gameObject.transform, eventArgs.WebView, browserID);
+
+        CanvasWebViewPrefab popupPrefab =
+            popoutObject.GetNamedChild("CanvasMainWindow").GetComponent<CanvasWebViewPrefab>();
+
+        // wait for the prefab to be initialized
+        await popupPrefab.WaitUntilInitialized();
+
+        // save the popout index into the popout list so we can use it to find the popout window later
+        // TODO: Think about the timing issue for this as the message is received
+        // then the popout happens a little later (only on load browsers?)
+        //int popoutID = lastPopoutID++;
+        popoutObject.GetComponent<PopoutCanvasWebBrowserManager>().popoutID = currentPopoutID;
+
+        // if it was created by load browser seesion, the popout config data has the data to update position, etc.
+        //if (popoutWindowData.TryGetValue(popoutID, out popoutConfig) && popoutConfig.beingLoaded)
+        if (tempPopoutConfigData != null)
+        {
+            // if we are loading the popout, grab the data from the config file
+            popoutObject.transform.position = tempPopoutConfigData.startingPosition;
+            popoutObject.transform.rotation = tempPopoutConfigData.startingRotation;
+            popoutObject.transform.localScale = tempPopoutConfigData.startingScale;
+
+            Debug.Log("Popout loaded: " + tempPopoutConfigData.startingPopoutMessage + ", for window: " + browserID);
+        }
+        // otherwise the popout config data was not set up for a load, so leave the game object as is
+
+        // clear the tempData as we are done with it
+        tempPopoutConfigData = null;
+
+        // Set up the closing of the popup - may not be needed
+        popupPrefab.WebView.CloseRequested += (popupWebView, closeEventArgs) => {
+            Debug.Log("Closing the popup");
+            CloseWindow();
+        };
+
+    } // end CreatePopoutWindow
 
     /// <summary>
     /// Controls messages to the JavaScript control panel, currently only forward and back buttons

@@ -5,10 +5,8 @@ using UnityEngine;
 /// for each set of web page popouts in a given data set
 /// </summary>
 [System.Serializable]
-public class PopoutConfigData
+public class MDVMessageData
 {
-    public string startingPopoutMessage;
-    public Vector3 startingPosition;
-    public Quaternion startingRotation;
-    public Vector3 startingScale;
+    public string type;
+    public string chartID;
 }

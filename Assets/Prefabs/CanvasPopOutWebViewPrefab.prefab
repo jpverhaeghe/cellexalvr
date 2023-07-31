@@ -262,7 +262,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7997939746554855891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,11 +501,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d6857a274bd9f489f164c84d56f758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controlsWebViewPrefab: {fileID: 0}
   _canvasWebViewPrefab: {fileID: 8609086302564720174}
+  _controlsWebViewPrefab: {fileID: 0}
   _keyboard: {fileID: 0}
   urlInputField: {fileID: 0}
+  loadedPopouts: []
+  tempPopoutConfigData:
+    startingPopoutMessage: 
+    startingPosition: {x: 0, y: 0, z: 0}
+    startingRotation: {x: 0, y: 0, z: 0, w: 0}
+    startingScale: {x: 0, y: 0, z: 0}
   browserID: 0
+  lastPopoutID: 0
+  currentPopoutID: 0
+  parentID: 0
+  popoutID: 0
 --- !u!1 &7031832784497221108
 GameObject:
   m_ObjectHideFlags: 0

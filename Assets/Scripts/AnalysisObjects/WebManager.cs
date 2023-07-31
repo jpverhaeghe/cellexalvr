@@ -1,9 +1,9 @@
 ﻿using CellexalVR.General;
 using CellexalVR.Menu.Buttons;
-using SimpleWebBrowser;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Unity.Transforms;
+using System.Threading.Tasks;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using Vuplex.WebView;
@@ -320,7 +320,7 @@ namespace CellexalVR.AnalysisObjects
                 FullCanvasWebBrowserManager browserCanvas = 
                     browserWindow.Value.GetComponent<FullCanvasWebBrowserManager>();
 
-                // TODO: only adding the main windows for now, will add pop-outs later
+                // adding the main windows as pop-outs are connected by main window
                 if (browserCanvas.GetType() != typeof(PopoutCanvasWebBrowserManager))
                 {
                     // create the browser config data for this window
@@ -343,13 +343,12 @@ namespace CellexalVR.AnalysisObjects
                             popout.GetComponent<PopoutCanvasWebBrowserManager>();
 
                         // create a variable to store the popout string data into
-                        string popoutDataMessage;
+                        PopoutConfigData popoutData;
 
                         // storing the popout data string if it exists
-                        if (browserCanvas.popoutWindowData.TryGetValue(popoutCanvas.popoutID, out popoutDataMessage))
+                        if (browserCanvas.popoutWindowData.TryGetValue(popoutCanvas.popoutID, out popoutData))
                         {
-                            PopoutConfigData popoutData = new PopoutConfigData();
-                            popoutData.startingPopoutMessage = popoutDataMessage;
+                            //popoutData.startingPopoutMessage = popoutData.startingPopoutMessage;
 
                             // store the position, rotation and scale
                             popoutData.startingPosition = popout.transform.position;
@@ -401,12 +400,28 @@ namespace CellexalVR.AnalysisObjects
                 // load each page and set up the transforms
                 foreach (BrowserConfigData browserData in browserSaveData.browserConfigData)
                 {
-                    // create the web page with the saved url
+                    // create the web page with the saved url and transform data
                     GameObject browserCanvas = CreateNewWindow(browserData.startingPosition, 
                                                                browserData.startingRotation,
                                                                browserData.startingURL, false);
 
                     browserCanvas.transform.localScale = browserData.startingScale;
+
+                    // wait for the prefab to be initialized so we can send popout messages
+                    FullCanvasWebBrowserManager mainBrowserManager = 
+                        browserCanvas.GetComponent<FullCanvasWebBrowserManager>();
+
+                    mainBrowserManager.loadedPopouts = browserData.popoutWindows;
+
+                    // testing to see if the popoutWindows are stored correctly as json
+                    if (browserData.popoutWindows.Count > 0)
+                    {
+                        MDVMessageData popoutMessageAsJson =
+                            JsonUtility.FromJson<MDVMessageData>(browserData.popoutWindows[0].startingPopoutMessage);
+
+                        Debug.Log("A popout message as json for window " + mainBrowserManager.browserID + 
+                                  " - type: " + popoutMessageAsJson.type + ", chartID: " + popoutMessageAsJson.chartID);
+                    }
                 }
             }
             else
