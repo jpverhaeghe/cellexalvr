@@ -1,24 +1,24 @@
-﻿using CellexalVR.General;
+﻿using CellexalVR.AnalysisObjects;
+using CellexalVR.General;
 using CellexalVR.Interaction;
-using System.Diagnostics;
-using UnityEngine;
 
 namespace CellexalVR.Menu.Buttons.Tools
 {
     /// <summary>
-    /// Toggle on/off the web browser tool. This also activates the laser on the right hand so that one can interact with the browser.
+    /// Toggle on/off the web browser windows. 
+    /// This also activates the laser on the right hand so that one can interact with the browser.
     /// </summary>
     public class WebBrowserButton : CellexalToolButton
     {
         private void Start()
         {
-            SetButtonActivated(true);
+            SetButtonActivated(false);
             CellexalEvents.GraphsUnloaded.RemoveListener(TurnOff);
         }
 
         protected override string Description
         {
-            get { return "Toggle Web Browser"; }
+            get { return "Hide/Show Web Browser"; }
         }
 
         protected override ControllerModelSwitcher.Model ControllerModel
@@ -31,13 +31,11 @@ namespace CellexalVR.Menu.Buttons.Tools
         {
             base.Click();
             referenceManager.multiuserMessageSender.SendMessageActivateBrowser(toolActivated);
-            referenceManager.webBrowser.GetComponent<WebManager>().SetBrowserActive(toolActivated);
-            referenceManager.webBrowser.GetComponent<WebManager>().SetVisible(toolActivated);
+            referenceManager.webManager.GetComponent<WebManager>().SetBrowserActive(toolActivated);
+            referenceManager.webManager.GetComponent<WebManager>().SetVisible(toolActivated);
             //CellexalLog.Log("Web client should start now!");
-            //Debug.Log("Web client should start now!");
 
-        }
-
+        } // end Click
 
     }
 }

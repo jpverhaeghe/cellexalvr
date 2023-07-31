@@ -50,7 +50,6 @@ namespace CellexalVR.General
         public MinimizeTool minimizeTool;
         //public GameObject helpMenu;
         public DrawTool drawTool;
-        public GameObject webBrowser;
         public CaptureScreenshot screenshotCamera;
         public GameObject teleportLaser;
         public VelocityPathTool velocityPathTool;
@@ -90,6 +89,7 @@ namespace CellexalVR.General
         [Header("Managers, generators and things")]
         public GraphManager graphManager;
         public CellManager cellManager;
+        public GameObject webManager;
         public LineBundler lineBundler;
         public SelectionManager selectionManager;
         public AnnotationManager annotationManager;
@@ -198,7 +198,7 @@ namespace CellexalVR.General
             deleteTool = rightController.GetComponentInChildren<RemovalController>(true).gameObject;
             minimizeTool = rightController.GetComponentInChildren<MinimizeTool>(true);
             drawTool = rightController.GetComponentInChildren<DrawTool>(true);
-            webBrowser = GameObject.Find("WebBrowser");
+            webManager = GameObject.Find("WebBrowser");
             screenshotCamera = GameObject.Find("SnapShotCam").GetComponent<CaptureScreenshot>();
             teleportLaser = leftController.gameObject;
             velocityPathTool = rightController.GetComponentInChildren<VelocityPathTool>(true);

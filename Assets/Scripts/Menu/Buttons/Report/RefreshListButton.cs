@@ -20,7 +20,7 @@ namespace CellexalVR.Menu.Buttons.Report
         protected override void Awake()
         {
             base.Awake();
-            reportListGenerator = referenceManager.webBrowser.GetComponentInChildren<ReportListGenerator>();
+            reportListGenerator = referenceManager.webManager.GetComponentInChildren<ReportListGenerator>();
         }
 
         public override void Click()
