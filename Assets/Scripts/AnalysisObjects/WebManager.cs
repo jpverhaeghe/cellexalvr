@@ -18,9 +18,10 @@ namespace CellexalVR.AnalysisObjects
         // Constant strings for this class
         //public const string default_url =
         //    "https://mdv-dev.netlify.app/?dir=https://mdvstatic.netlify.app/ATRTImages2&socket=http://localhost:5050";
-        public const string default_url = "http://localhost:5050/?view=default";
+        //public const string default_url = "http://localhost:5050/?view=default";
         //public const string default_url = "https://mdv.molbiol.ox.ac.uk/projects";
         //"https://datashare.molbiol.ox.ac.uk/public/project/Wellcome_Discovery/sergeant/pbmc1k";
+        // TODO: Need to move this from data directories to user directories so each user can have their own config file
         public const string browserConfigFilename = "/BrowserConfigData.json";
 
         [Header("The prefab for all browser window instances")]
@@ -204,7 +205,8 @@ namespace CellexalVR.AnalysisObjects
             if (active && (browserWindows.Count <= 0))
             {
                 // create a new window here
-                CreateNewWindow(gameObject.transform, default_url);
+                //CreateNewWindow(gameObject.transform, default_url);
+                CreateNewWindow(gameObject.transform, CellexalConfig.Config.defaultWebPage);
             }
 
         } // end SetBrowserActive

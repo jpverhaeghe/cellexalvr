@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Config xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ConfigDir>\Config</ConfigDir>
+  <defaultWebPage>http://localhost:5050/?view=default</defaultWebPage>
   <RscriptexePath>REPLACE THIS TEXT WITH PATH TO R EXECUTABLE</RscriptexePath>
   <GraphLoadingCellsPerFrameStartCount>200</GraphLoadingCellsPerFrameStartCount>
   <GraphLoadingCellsPerFrameIncrement>15</GraphLoadingCellsPerFrameIncrement>
