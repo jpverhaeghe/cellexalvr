@@ -21,6 +21,7 @@ namespace CellexalVR.General
     public class Config
     {
         public string ConfigDir { get; set; }
+        public string defaultWebPage { get; set; }
         public string RscriptexePath { get; set; }
         public string ScarfscriptPath { get; set; }
         public bool RequireTouchpadClickToInteract { get; set; }
@@ -66,6 +67,7 @@ namespace CellexalVR.General
         public Config(Config c)
         {
             ConfigDir = c.ConfigDir;
+            defaultWebPage = c.defaultWebPage;
             if (CrossSceneInformation.RScriptPath != null)
             {
                 RscriptexePath = CrossSceneInformation.RScriptPath;
