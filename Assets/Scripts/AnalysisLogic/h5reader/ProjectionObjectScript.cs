@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 namespace CellexalVR.AnalysisLogic.H5reader
@@ -15,7 +14,7 @@ namespace CellexalVR.AnalysisLogic.H5reader
         }
 
         public projectionType type;
-        public string name = "unnamed-projection";
+        public new string name = "unnamed-projection";
         private Dictionary<string, string> paths;
         private Dictionary<string, char> dataTypes;
 

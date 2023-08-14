@@ -4,8 +4,6 @@ using UnityEngine;
 using TMPro;
 using CellexalVR.General;
 using UnityEngine.UI;
-using System.IO;
-using CellexalVR.Interaction;
 
 namespace CellexalVR.AnalysisLogic.H5reader
 {
@@ -33,7 +31,7 @@ namespace CellexalVR.AnalysisLogic.H5reader
         public H5readerAnnotater annotater;
 
 
-        public string name;
+        public new string name;
         public bool isTop;
         public bool isBottom = false;
         private Color hoverColor = Color.white;

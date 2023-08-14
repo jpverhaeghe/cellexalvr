@@ -23,7 +23,7 @@ namespace CellexalVR.General
             Straight
         }
         public NodeMode currentNodeMode;
-        private MeshFilter filter;
+        //private MeshFilter filter;
 
         // private Mesh mesh;
 
@@ -38,8 +38,8 @@ namespace CellexalVR.General
         private Vector3[] tempScales;
 
         private bool updatingMesh;
-        private float tempCurvatureXValue;
-        private MeshCollider collider;
+        //private float tempCurvatureXValue;
+        //private MeshCollider collider;
 
         [SerializeField, Range(0f, 2f)] private float curvatureX = 1.03f;
 

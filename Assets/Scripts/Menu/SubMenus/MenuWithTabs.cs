@@ -19,7 +19,7 @@ namespace CellexalVR.Menu.SubMenus
         public string[] categoriesAndNames;
         public string currentCategory;
 
-        public bool Active
+        public new bool Active
         {
             get => active;
             set { active = value; }

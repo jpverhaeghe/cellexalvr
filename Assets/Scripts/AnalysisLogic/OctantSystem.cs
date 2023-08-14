@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using CellexalVR.General;
-using CellexalVR.Interaction;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 

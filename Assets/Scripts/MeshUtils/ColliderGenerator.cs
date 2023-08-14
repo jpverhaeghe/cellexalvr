@@ -84,14 +84,14 @@ namespace Assets.Scripts.MeshUtils
             // add last collider
 
 
-            float minXR = int.MaxValue;
+            /*float minXR = int.MaxValue;
             float maxXR = int.MinValue;
 
             float minYR = int.MaxValue;
             float maxYR = int.MinValue;
 
             float minZR = int.MaxValue;
-            float maxZR = int.MinValue;
+            float maxZR = int.MinValue;*/
 
 
 
@@ -99,7 +99,7 @@ namespace Assets.Scripts.MeshUtils
 
         private void AddCollider(List<Vector3> positions, Vector3 min, Vector3 max, Vector3 centroid)
         {
-            Vector3 center;
+            //Vector3 center;
             BoxCollider col = gameObject.AddComponent<BoxCollider>();
             col.center = new Vector3((max.x + min.x) / 2f, (max.y + min.y) / 2f, (max.z + min.z) / 2f);
             //col.center = (centroid);

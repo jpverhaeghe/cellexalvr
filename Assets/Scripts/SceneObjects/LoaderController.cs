@@ -32,7 +32,7 @@ namespace CellexalVR.SceneObjects
         private GameObject helperCylinder;
         private float timeEntered = 0;
         private ArrayList cellsToDestroy;
-        private bool cellsEntered = false;
+        //private bool cellsEntered = false;
         private bool collidersDestroyed = false;
         private Vector3 startPosition;
         private Vector3 finalPosition;
@@ -110,7 +110,7 @@ namespace CellexalVR.SceneObjects
         /// </summary>
         private void ResetLoaderBooleans()
         {
-            cellsEntered = false;
+            //cellsEntered = false;
             timeEntered = 0;
             collidersDestroyed = false;
         }
@@ -169,7 +169,7 @@ namespace CellexalVR.SceneObjects
                     if (timeEntered == 0)
                     {
                         timeEntered = Time.time;
-                        cellsEntered = true;
+                        //cellsEntered = true;
                     }
                     if (!cellParent.GetComponent<CellsToLoad>().GraphsLoaded())
                     {

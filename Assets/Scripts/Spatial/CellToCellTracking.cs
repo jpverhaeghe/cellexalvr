@@ -38,7 +38,7 @@ public class CellToCellTracking : MonoBehaviour
         Color[] worldStartPosition = new Color[endPositions.Length];
         Color[] worldEndPositions = new Color[endPositions.Length];
         Color[] velocities = new Color[endPositions.Length];
-        Vector3 diff;
+        //Vector3 diff;
         Vector3 start;
         Vector3 end;
         for (int i = 0; i < startPositions.Length; i++)

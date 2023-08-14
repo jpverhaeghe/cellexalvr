@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using CellexalVR.General;
 using CellexalVR.Menu.Buttons.Networks;
 using CellexalVR.SceneObjects;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 namespace CellexalVR.Menu.SubMenus
 {
@@ -299,7 +299,7 @@ namespace CellexalVR.Menu.SubMenus
             }
         }
 
-        public ToggleArcsButton FindButton(string buttonName)
+        public new ToggleArcsButton FindButton(string buttonName)
         {
             return toggleArcButtonList.FirstOrDefault(b => b.name == name);
         }

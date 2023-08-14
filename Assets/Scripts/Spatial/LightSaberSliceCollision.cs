@@ -1,9 +1,6 @@
 using AnalysisLogic;
 using CellexalVR.General;
 using CellexalVR.AnalysisLogic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -25,7 +22,7 @@ namespace CellexalVR.Spatial
         private GameObject enterMarker2;
         private GameObject exitMarker;
         private GameObject exitMarker2;
-        private BoxCollider collider;
+        private new BoxCollider collider;
         private bool firstPoint;
         private bool lastPoint;
         private float3 previousPoint;

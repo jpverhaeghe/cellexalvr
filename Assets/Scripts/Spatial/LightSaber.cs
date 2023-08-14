@@ -1,7 +1,5 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
-using CellexalVR.AnalysisLogic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -22,7 +20,7 @@ namespace CellexalVR.Spatial
         private Vector3 positionInHand = new Vector3(0.01f, -0.02f, -0.02f);
         private Quaternion rotationInHand = Quaternion.Euler(15f, 90f, 50f);
         private bool inHand;
-        private Rigidbody rigidbody;
+        private new Rigidbody rigidbody;
 
         private void Awake()
         {

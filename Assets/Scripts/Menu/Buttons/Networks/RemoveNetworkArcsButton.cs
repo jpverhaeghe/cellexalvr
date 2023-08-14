@@ -26,7 +26,7 @@ namespace CellexalVR.Menu.Buttons.Networks
         }
 
 
-        private void OnTriggerEnter(Collider other)
+        private new void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Controller"))
             {
@@ -34,7 +34,7 @@ namespace CellexalVR.Menu.Buttons.Networks
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private new void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Controller"))
             {
