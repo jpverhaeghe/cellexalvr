@@ -13,9 +13,11 @@ using System.Collections.Generic;
 public class FullCanvasWebBrowserManager : MonoBehaviour
 {
     // Canvas prefabs in the resource folder for Vulpex WebView
+    [Header("Prefabs for use in the browser window script")]
     [SerializeField] public CanvasWebViewPrefab _canvasWebViewPrefab;
     [SerializeField] CanvasWebViewPrefab _controlsWebViewPrefab;
-    [SerializeField] CanvasKeyboard _keyboard;
+    //[SerializeField] CanvasKeyboard _keyboard;
+    [Header("Input fields and buttons used by the browser window")]
     [SerializeField] public TMP_InputField urlInputField;
 
     // testing a key system to know what browser buttons are being invoked
@@ -142,7 +144,6 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         // only create a new window if the web manager exists
         if (webManagerScript != null)
         {
-            //webManagerScript.CreateNewWindow(gameObject.transform, "https://www.google.com/");
             webManagerScript.CreateNewWindow(gameObject.transform, urlInputField.text);
         }
         else
@@ -187,6 +188,42 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         webView.Reload();
 
     } // end RefreshWindow
+
+    /// <summary>
+    /// Turns on/off graphs for this data set - assumes referenceManager script is active
+    /// </summary>
+    public void ToggleGraphs()
+    {
+        Debug.Log("Toggle Graph button activated!");
+
+        if (referenceManager != null)
+        {
+            referenceManager.graphManager.ToggleGraphs();
+        }
+        else
+        {
+            Debug.Log("No web manager, so can't add a new browser window");
+        }
+
+    } // ToggleGraphs
+
+    /// <summary>
+    /// Saves the current layout of all web browser windows - assumes webManager script is active
+    /// </summary>
+    public void SaveBrowserLayout()
+    {
+        Debug.Log("Save browser layout button activated!");
+
+        if (webManagerScript != null)
+        {
+            webManagerScript.SaveBrowserSession();
+        }
+        else
+        {
+            Debug.Log("No web manager, so can't add a new browser window");
+        }
+
+    } // SaveBrowserLayout
 
     /// <summary>
     /// Removes the popout window from this browser window dictionary with the given id
@@ -326,24 +363,38 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
             }
         }
 
+        // - Check the toggle graphs button (to fix the issue of them getting multiply clicked)
+        if (!eventTriggered)
+        {
+            // Check to see if the toggle graphs button was pressed
+            eventTriggered = IsCanvasButtonPressed(gameObject.GetNamedChild("ToggleGraphButton"));
+        }
+
+        // - Check the save web layout button (to fix the issue of them getting multiply clicked)
+        if (!eventTriggered)
+        {
+            // Check to see if the save web layout button was pressed
+            eventTriggered = IsCanvasButtonPressed(gameObject.GetNamedChild("SaveLayoutButton"));
+        }
+
         // - Check the close window button (to fix the issue of them getting multiply clicked)
         if (!eventTriggered)
         {
-            // get the rect transform for the close button
+            // Check to see if the close button was pressed
             eventTriggered = IsCanvasButtonPressed(gameObject.GetNamedChild("CloseWindowButton"));
         }
 
         // - Check the add window button (to fix the issue of them getting multiply clicked)
         if (!eventTriggered)
         {
-            // get the rect transform for the close button
+            // Check to see if the add window button was pressed
             eventTriggered = IsCanvasButtonPressed(gameObject.GetNamedChild("AddWindowButton"));
         }
 
         // - Check the refresh window button (to fix the issue of them getting multiply clicked)
         if (!eventTriggered)
         {
-            // get the rect transform for the close button
+            // Check to see if the refresh window button was pressed
             eventTriggered = IsCanvasButtonPressed(gameObject.GetNamedChild("RefreshWindowButton"));
         }
 
@@ -364,7 +415,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         }
 
         // Go through the keyboard section next
-        if (!eventTriggered && (_keyboard != null))
+        /*if (!eventTriggered && (_keyboard != null))
         {
             // - The keyboard area
             Vector2 pixelUV = GetScreenCoords(_keyboard.GetComponent<RectTransform>());
@@ -374,7 +425,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
                 _keyboard.WebViewPrefab.WebView.Click((int)pixelUV.x, (int)pixelUV.y);                 
                 eventTriggered = true;
             }
-        }
+        }*/
 
     } // end OnTriggerClick
 

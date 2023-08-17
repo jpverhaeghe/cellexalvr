@@ -31,7 +31,7 @@ namespace CellexalVR.AnalysisObjects
         [Header("Buttons associated with the Web Manager")]
         [SerializeField] CellexalToolButton webBrowserVisibilityButton;
         [SerializeField] CellexalButton resetWebBrowserButton;
-        [SerializeField] GameObject graphButton;
+        //[SerializeField] GameObject graphButton;
 
         public TMPro.TextMeshPro output;
         public ReferenceManager referenceManager;
@@ -125,10 +125,10 @@ namespace CellexalVR.AnalysisObjects
 
             // for now, if the graphs are not visible, make them visible.
             // TODO: This will need to know what pop-out was generated and what graph it is associated with
-            if (!referenceManager.graphManager.GraphsVisible)
+            /*if (!referenceManager.graphManager.GraphsVisible)
             {
                 referenceManager.graphManager.ShowGraphs();
-            }
+            }*/
 
             return newWindow;
 
@@ -250,7 +250,7 @@ namespace CellexalVR.AnalysisObjects
         public void ClearBrowserSession()
         {
             // save the browser session as it is
-            SaveBrowserSession();
+            //SaveBrowserSession();
 
             // remove browsers as they will be loaded from data next time
             DestroyCurrentBrowsers();
@@ -261,7 +261,7 @@ namespace CellexalVR.AnalysisObjects
 
             // hide the button for hiding and showing graphs
             // TODO: This should be moved elsewhere as it really isn't part of web management
-            graphButton.SetActive(false);
+            //graphButton.SetActive(false);
 
         } // end ClearBrowserSession
 
@@ -306,7 +306,7 @@ namespace CellexalVR.AnalysisObjects
 
             // show the button for hiding and showing graphs
             // TODO: This should be moved elsewhere as it really isn't part of web management
-            graphButton.SetActive(true);
+            //graphButton.SetActive(true);
 
         } // end CreateBrowserSession
 
@@ -314,7 +314,7 @@ namespace CellexalVR.AnalysisObjects
         /// Saves the current browser session to a JSON file in the project data folder, 
         /// creating it if it doesn't exist
         /// </summary>
-        private void SaveBrowserSession()
+        public void SaveBrowserSession()
         {
             string path = CellexalUser.DatasetFullPath + browserConfigFilename;
 
