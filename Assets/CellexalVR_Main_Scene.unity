@@ -904,6 +904,11 @@ PrefabInstance:
       propertyPath: referenceManager
       value: 
       objectReference: {fileID: 1319570383771400436}
+    - target: {fileID: 582773992864188842, guid: 04bd4990d5f5f1f42a354515c676f336,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 606463199940993697, guid: 04bd4990d5f5f1f42a354515c676f336,
         type: 3}
       propertyPath: m_IsActive
@@ -1942,6 +1947,7 @@ MonoBehaviour:
   resetWebBrowserButton: {fileID: 493123151}
   output: {fileID: 1479088294}
   referenceManager: {fileID: 1319570383771400436}
+  activeBrowserID: 0
 --- !u!4 &322551009
 Transform:
   m_ObjectHideFlags: 0

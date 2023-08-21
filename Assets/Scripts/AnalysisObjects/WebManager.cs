@@ -31,10 +31,10 @@ namespace CellexalVR.AnalysisObjects
         [Header("Buttons associated with the Web Manager")]
         [SerializeField] CellexalToolButton webBrowserVisibilityButton;
         [SerializeField] CellexalButton resetWebBrowserButton;
-        //[SerializeField] GameObject graphButton;
 
         public TMPro.TextMeshPro output;
         public ReferenceManager referenceManager;
+        public int activeBrowserID = 0;
 
         private Dictionary<int, GameObject> browserWindows;
         private int lastBrowserID = 0;
@@ -149,6 +149,49 @@ namespace CellexalVR.AnalysisObjects
         } // end CreatePopOutWindow
 
         /// <summary>
+        /// Checks to see if the browser with the given id is currently the active browser
+        /// </summary>
+        /// <param name="browserID"></param>
+        /// <returns></returns>
+        public bool IsBrowserActive(int  browserID)
+        {
+            return (browserID == activeBrowserID);
+
+        } // end IsBrowserActive
+
+        /// <summary>
+        /// Activates the browser with the given ID, de-activating the previous one
+        /// </summary>
+        /// <param name="browserID"></param>
+        public void ActivateBrowser(int browserID)
+        {
+            // de-activate the previous browser
+            GameObject currentActiveBrowser;
+
+            if (browserWindows.TryGetValue(activeBrowserID, out currentActiveBrowser))
+            {
+                FullCanvasWebBrowserManager canvasWebBrowserManager =
+                    currentActiveBrowser.GetComponent<FullCanvasWebBrowserManager>();
+
+                canvasWebBrowserManager.activeBrowser = false;
+                canvasWebBrowserManager.cursorIcon.SetActive(false);
+            }
+
+            activeBrowserID = browserID;
+
+            // now set up the newly clicked browser window to be the active one
+            if (browserWindows.TryGetValue(browserID, out currentActiveBrowser))
+            {
+                FullCanvasWebBrowserManager canvasWebBrowserManager = 
+                    currentActiveBrowser.GetComponent<FullCanvasWebBrowserManager>();
+
+                canvasWebBrowserManager.activeBrowser = true;
+                canvasWebBrowserManager.cursorIcon.SetActive(true);
+            }
+
+        } // end ActivateBrowser
+
+        /// <summary>
         /// Removes the browser window from the list of game objects being tracked by the browser manager
         /// </summary>
         /// <param name="browserWindowToRemove">The browser window to remove from the scene</param>
@@ -182,25 +225,11 @@ namespace CellexalVR.AnalysisObjects
 
         } // end RemoveBrowserWindowFromScene
 
-        // TODO: Update this to use a different output text and use 3D Web View keyboard
-        // - May not be necessary
-        public void EnterKey()
-        {
-            print("Navigate to - " + output.text);
-            // If url field does not contain '.' then may not be a url so google the output instead
-            if (!output.text.Contains('.'))
-            {
-                output.text = "www.google.com/search?q=" + output.text;
-            }
-            //webBrowser.OnNavigate(output.text);
-            referenceManager.multiuserMessageSender.SendMessageBrowserEnter();
-        }
-
         /// <summary>
         /// Will reset the main window if all windows were closed, only if active is true
         /// </summary>
         /// <param name="active"></param>
-        public void SetBrowserActive(bool active)
+        public void ResetIfNoActiveBrowser(bool active)
         {
             if (active && (browserWindows.Count <= 0))
             {
@@ -209,7 +238,7 @@ namespace CellexalVR.AnalysisObjects
                 CreateNewWindow(gameObject.transform, CellexalConfig.Config.defaultWebPage);
             }
 
-        } // end SetBrowserActive
+        } // end ResetIfNoActiveBrowser
 
         /// <summary>
         /// Hides or shows browser windows based on visible parameter
@@ -234,7 +263,7 @@ namespace CellexalVR.AnalysisObjects
             DestroyCurrentBrowsers();
 
             // create the initial window
-            SetBrowserActive(true);
+            ResetIfNoActiveBrowser(true);
 
             // hide the browser windows if the browser was hidden before
             if (!isVisible)
@@ -245,23 +274,16 @@ namespace CellexalVR.AnalysisObjects
         } // end ResetBrowserSession
 
         /// <summary>
-        /// Clears the current browser session, deleting all the browser windows and saving the layout for later
+        /// Clears the current browser session, deleting all the browser windows
         /// </summary>
         public void ClearBrowserSession()
         {
-            // save the browser session as it is
-            //SaveBrowserSession();
-
             // remove browsers as they will be loaded from data next time
             DestroyCurrentBrowsers();
 
             // first set up the browser buttons as inactive
             webBrowserVisibilityButton.SetButtonActivated(false);
             resetWebBrowserButton.SetButtonActivated(false);
-
-            // hide the button for hiding and showing graphs
-            // TODO: This should be moved elsewhere as it really isn't part of web management
-            //graphButton.SetActive(false);
 
         } // end ClearBrowserSession
 
@@ -303,10 +325,6 @@ namespace CellexalVR.AnalysisObjects
 
             // go through the graphs and mark them as hidden to begin with
             referenceManager.graphManager.HideGraphs();
-
-            // show the button for hiding and showing graphs
-            // TODO: This should be moved elsewhere as it really isn't part of web management
-            //graphButton.SetActive(true);
 
         } // end CreateBrowserSession
 

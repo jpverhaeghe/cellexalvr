@@ -262,7 +262,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &7997939746554855891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,8 +503,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasWebViewPrefab: {fileID: 8609086302564720174}
   _controlsWebViewPrefab: {fileID: 0}
-  _keyboard: {fileID: 0}
   urlInputField: {fileID: 0}
+  cursorIcon: {fileID: 0}
   loadedPopouts: []
   tempPopoutConfigData:
     startingPopoutMessage: 
@@ -514,6 +514,7 @@ MonoBehaviour:
   browserID: 0
   lastPopoutID: 0
   currentPopoutID: 0
+  activeBrowser: 0
   parentID: 0
   popoutID: 0
 --- !u!1 &7031832784497221108

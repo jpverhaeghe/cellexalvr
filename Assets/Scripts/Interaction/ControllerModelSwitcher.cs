@@ -255,7 +255,7 @@ namespace CellexalVR.Interaction
                     break;
 
                 //case Model.WebBrowser:
-                //    webBrowser.GetComponent<WebManager>().SetBrowserActive(true);
+                //    webBrowser.GetComponent<WebManager>().ResetIfNoActiveBrowser(true);
                 //    laserPointerController.ToggleLaser(true);
                 //    laserPointerController.origin.localRotation = Quaternion.identity;
                 //    break;
@@ -327,7 +327,7 @@ namespace CellexalVR.Interaction
                     laserPointerController.ToggleLaser(true);
                     break;
                 //case Model.WebBrowser:
-                //    webBrowser.GetComponent<WebManager>().SetBrowserActive(true);
+                //    webBrowser.GetComponent<WebManager>().ResetIfNoActiveBrowser(true);
                 //    laserPointerController.ToggleLaser(true);
                 //    break;
                 case Model.TwoLasers:

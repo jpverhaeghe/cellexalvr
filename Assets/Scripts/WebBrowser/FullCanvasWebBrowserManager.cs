@@ -17,16 +17,18 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     [SerializeField] public CanvasWebViewPrefab _canvasWebViewPrefab;
     [SerializeField] CanvasWebViewPrefab _controlsWebViewPrefab;
     //[SerializeField] CanvasKeyboard _keyboard;
-    [Header("Input fields and buttons used by the browser window")]
+    [Header("Input field and cursor icon used by the browser window")]
     [SerializeField] public TMP_InputField urlInputField;
+    [SerializeField] public GameObject cursorIcon;
 
-    // testing a key system to know what browser buttons are being invoked
+    // Popout data for this browser, used by web manager to save/load browser layouts
     public Dictionary<int, PopoutConfigData> popoutWindowData;
     public List<PopoutConfigData> loadedPopouts;
     public PopoutConfigData tempPopoutConfigData;
     public int browserID;
     public int lastPopoutID;
     public int currentPopoutID;
+    public bool activeBrowser;                      // to let the cursor system know if it should move
 
     // used by sub-classes
     protected WebManager webManagerScript;
@@ -51,6 +53,9 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
 
         // grab the interactable script from this prefab for sending messages to other clients on position
         interactable = GetComponent<XRGrabInteractable>();
+
+        // set the cursor icon as not active by default, clicking the main window of a browser prefab will activate it
+        cursorIcon.SetActive(false);
 
         // Jim - attempting to create a CanvasWebViewPrefab for the controls
         _controlsWebViewPrefab.NativeOnScreenKeyboardEnabled = false;
@@ -122,6 +127,9 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         {
             Debug.Log($"Console message logged: [{eventArgs.Level}] {eventArgs.Message}" + "from window: " + browserID);
         };
+
+        // lastly, if this is the first window (ID 0) then activate it
+        webManagerScript.ActivateBrowser(0);
 
     } // end Start
 
@@ -343,6 +351,14 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
 
             if (pixelUV.x > 0)
             {
+                // for now if it isn't a pop-out and the main window was clicked
+                // then set this window as the active browser, then do the click
+                if ((this.GetType() != typeof(PopoutCanvasWebBrowserManager)) &&
+                   (!webManagerScript.IsBrowserActive(browserID)))
+                {
+                    webManagerScript.ActivateBrowser(browserID);
+                }
+
                 _canvasWebViewPrefab.WebView.Click((int)pixelUV.x, (int)pixelUV.y);
                 previousPixelUV = pixelUV;
                 dragging = true;

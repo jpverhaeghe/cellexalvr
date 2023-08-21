@@ -1692,7 +1692,7 @@ namespace CellexalVR.Multiuser
         //public void RecieveMessageActivateBrowser(bool activate)
         //{
         //    CellexalLog.Log("Recieved message to toggle web browser");
-        //    referenceManager.webBrowser.GetComponent<WebManager>().SetBrowserActive(activate);
+        //    referenceManager.webBrowser.GetComponent<WebManager>().ResetIfNoActiveBrowser(activate);
         //    //referenceManager.webBrowser.GetComponent<WebManager>().SetVisible(activate);
         //}
 

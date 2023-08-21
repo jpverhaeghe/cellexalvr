@@ -81,7 +81,17 @@ namespace CellexalVR.Menu.SubMenus
             renderTexture = new RenderTexture(1920, 1080, 16, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             cameraGameObject.GetComponentInChildren<Camera>(true).targetTexture = renderTexture;
             cameraGameObject.GetComponentInChildren<Camera>(true).pixelRect = new Rect(0, 0, 1920, 1080);
-            transform.Find("Preview Video").GetComponent<Renderer>().sharedMaterial.mainTexture = renderTexture;
+            Transform previewVideo = transform.Find("Preview Video");
+
+            if (previewVideo != null) {
+                Renderer renderer = previewVideo.GetComponent<Renderer>();
+
+                if (renderer != null)
+                {
+                    //renderer.sharedMaterial.mainTexture = renderTexture;
+                    renderer.material.mainTexture = renderTexture;
+                }
+            }
 
             tInc = 1f / (framesPerPos - 1);
             cameraGameObject.transform.parent = null;
