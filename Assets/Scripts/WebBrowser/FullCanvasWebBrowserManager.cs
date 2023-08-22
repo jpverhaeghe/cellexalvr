@@ -12,6 +12,8 @@ using System.Collections.Generic;
 
 public class FullCanvasWebBrowserManager : MonoBehaviour
 {
+    private const int TIME_TO_WAIT_FOR_MESSAGE = 5;
+
     // Canvas prefabs in the resource folder for Vulpex WebView
     [Header("Prefabs for use in the browser window script")]
     [SerializeField] public CanvasWebViewPrefab _canvasWebViewPrefab;
@@ -19,6 +21,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     //[SerializeField] CanvasKeyboard _keyboard;
     [Header("Input field and cursor icon used by the browser window")]
     [SerializeField] public TMP_InputField urlInputField;
+    [SerializeField] TMP_Text messageText;
     [SerializeField] public GameObject cursorIcon;
 
     // Popout data for this browser, used by web manager to save/load browser layouts
@@ -225,6 +228,8 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         if (webManagerScript != null)
         {
             webManagerScript.SaveBrowserSession();
+            messageText.text = "Browser layout has been saved!";
+            Invoke("ClearMessageText", TIME_TO_WAIT_FOR_MESSAGE);
         }
         else
         {
@@ -650,6 +655,15 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         return eventTriggered;
 
     } // end IsCanvasButtonPressed
+
+    /// <summary>
+    /// Clears the message text
+    /// </summary>
+    private void ClearMessageText()
+    {
+        messageText.text = "";
+
+    } // end ClearMessageText
 
     /// <summary>
     /// Controls HTML code that is inserted into the controls part of the browser and is used for forward/back states
