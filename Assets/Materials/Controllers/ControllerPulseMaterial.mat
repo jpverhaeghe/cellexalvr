@@ -76,11 +76,11 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Toggle: -1
+    - _Toggle: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Tint: {r: 0.2494589, g: 0.6271417, b: 0.112310335, a: 0.1}
+    - _Tint: {r: 0.2494589, g: 0.6271417, b: 0.112310335, a: 1}
   m_BuildTextureStacks: []

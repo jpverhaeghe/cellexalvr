@@ -24,14 +24,20 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     [SerializeField] TMP_Text messageText;
     [SerializeField] public GameObject cursorIcon;
 
-    // Popout data for this browser, used by web manager to save/load browser layouts
-    public Dictionary<int, PopoutConfigData> popoutWindowData;
-    public List<PopoutConfigData> loadedPopouts;
-    public PopoutConfigData tempPopoutConfigData;
+    // other public variables used by the browser window
     public int browserID;
-    public int lastPopoutID;
-    public int currentPopoutID;
     public bool activeBrowser;                      // to let the cursor system know if it should move
+
+    // Popout data for this browser, used by web manager to save/load browser layouts
+    [HideInInspector] public Dictionary<int, PopoutConfigData> popoutWindowData;
+    [HideInInspector] public List<PopoutConfigData> loadedPopouts;
+    [HideInInspector] public PopoutConfigData tempPopoutConfigData;
+    [HideInInspector] public int lastPopoutID;
+    [HideInInspector] public int currentPopoutID;
+
+    // for click and drag events
+    [HideInInspector] public IWithPointerDownAndUp webViewWithPointerDownUp;
+    [HideInInspector] public IWithMovablePointer webViewWithMoveablePointer;
 
     // used by sub-classes
     protected WebManager webManagerScript;
@@ -111,14 +117,16 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
         {
             // if the system can't handle pop-ups, let the user know
             _canvasWebViewPrefab.WebView.LoadHtml(NOT_SUPPORTED_HTML);
-            return;
         }
+        else 
+        {
 
-        // now attemtping to load pop-up mode into a new window
-        webViewWithPopups.SetPopupMode(PopupMode.LoadInNewWebView);
+            // now attemtping to load pop-up mode into a new window
+            webViewWithPopups.SetPopupMode(PopupMode.LoadInNewWebView);
 
-        // set the message handler for the popup
-        webViewWithPopups.PopupRequested += CreatePopoutWindow;
+            // set the message handler for the popup
+            webViewWithPopups.PopupRequested += CreatePopoutWindow;
+        }
 
         // testing to see if I can get input to work manually
         CellexalEvents.RightTriggerClick.AddListener(OnTriggerClick);
@@ -133,6 +141,10 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
 
         // lastly, if this is the first window (ID 0) then activate it
         webManagerScript.ActivateBrowser(0);
+
+        // testing pointer down/up events?
+        webViewWithPointerDownUp = _canvasWebViewPrefab.WebView as IWithPointerDownAndUp;
+        webViewWithMoveablePointer = _canvasWebViewPrefab.WebView as IWithMovablePointer;
 
     } // end Start
 
@@ -364,10 +376,21 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
                     webManagerScript.ActivateBrowser(browserID);
                 }
 
-                _canvasWebViewPrefab.WebView.Click((int)pixelUV.x, (int)pixelUV.y);
                 previousPixelUV = pixelUV;
                 dragging = true;
                 eventTriggered = true;
+
+                // attempting to add pointer down
+                if (webViewWithPointerDownUp != null)
+                {
+                    Vector2 normailzedPoint = 
+                        _canvasWebViewPrefab.WebView.PointToNormalized((int)pixelUV.x, (int)pixelUV.y);
+                    webViewWithPointerDownUp.PointerDown(normailzedPoint);
+                }
+                else
+                {
+                    _canvasWebViewPrefab.WebView.Click((int)pixelUV.x, (int)pixelUV.y);
+                }
             }
         }
 
@@ -430,7 +453,7 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
                 {
                     TMP_InputField urlInput = urlInputField.GetComponent<TMP_InputField>();
                     urlInput.ActivateInputField();
-                    eventTriggered = true;
+                    //eventTriggered = true;
                 }
             }
         }
@@ -456,7 +479,6 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
     protected void OnTriggerPressed()
     {
         // need to add a way to check for each area of the prefab:
-        //bool eventTriggered = false;
         Vector2 pixelUV;
 
         // - The main window (currently done)
@@ -466,18 +488,39 @@ public class FullCanvasWebBrowserManager : MonoBehaviour
 
             if (pixelUV.x > 0)
             {
-                int xChange = (int)previousPixelUV.x - (int)pixelUV.x;
-                int yChange = (int)previousPixelUV.y - (int)pixelUV.y;
-                _canvasWebViewPrefab.WebView.Scroll(xChange, yChange);
+                //int xChange = (int)previousPixelUV.x - (int)pixelUV.x;
+                //int yChange = (int)previousPixelUV.y - (int)pixelUV.y;
                 previousPixelUV = pixelUV;
-                //eventTriggered = true;
+
+                // attempting to add pointer move
+                if (webViewWithMoveablePointer != null)
+                {
+                    Vector2 normailzedPoint =
+                        _canvasWebViewPrefab.WebView.PointToNormalized((int)pixelUV.x, (int)pixelUV.y);
+                    webViewWithMoveablePointer.MovePointer(normailzedPoint);
+                }
             }
         }
 
     } // end OnTriggerPressed
 
-    protected void OnTriggerUp() 
+    protected void OnTriggerUp()
     {
+        // - The main window (currently done)
+        if ((_canvasWebViewPrefab != null) && dragging)
+        {
+            if (previousPixelUV.x > 0)
+            {
+                // attempting to add pointer up
+                if (webViewWithPointerDownUp != null)
+                {
+                    Vector2 normailzedPoint =
+                        _canvasWebViewPrefab.WebView.PointToNormalized((int)previousPixelUV.x, (int)previousPixelUV.y);
+                    webViewWithPointerDownUp.PointerUp(normailzedPoint);
+                }
+            }
+        }
+
         dragging = false;
     
     }  // end OnTriggerUp

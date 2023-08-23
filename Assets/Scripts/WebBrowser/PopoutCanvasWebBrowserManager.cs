@@ -3,6 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 using CellexalVR.AnalysisObjects;
 using CellexalVR.General;
+using Vuplex.WebView;
 
 public class PopoutCanvasWebBrowserManager : FullCanvasWebBrowserManager
 {
@@ -14,7 +15,7 @@ public class PopoutCanvasWebBrowserManager : FullCanvasWebBrowserManager
     /// <summary>
     /// Start is called before the first frame update to set up this object
     /// </summary>
-    void Start()
+    async void Start()
     {
         // grab the reference manager
         referenceManager = GameObject.Find("InputReader").GetComponent<ReferenceManager>();
@@ -25,9 +26,17 @@ public class PopoutCanvasWebBrowserManager : FullCanvasWebBrowserManager
         // grab the interactable script from this prefab for sending messages to other clients on position
         interactable = GetComponent<XRGrabInteractable>();
 
+        // wait for the main web canvas to initialize
+        await (_canvasWebViewPrefab.WaitUntilInitialized());
+
         // testing to see if I can get input to work manually
         CellexalEvents.RightTriggerClick.AddListener(OnTriggerClick);
+        CellexalEvents.RightTriggerPressed.AddListener(OnTriggerPressed);
         CellexalEvents.RightTriggerUp.AddListener(OnTriggerUp);
+
+        // testing pointer down/up events?
+        webViewWithPointerDownUp = _canvasWebViewPrefab.WebView as IWithPointerDownAndUp;
+        webViewWithMoveablePointer = _canvasWebViewPrefab.WebView as IWithMovablePointer;
 
     } // end Start
 }
